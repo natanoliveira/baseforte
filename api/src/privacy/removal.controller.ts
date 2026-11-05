@@ -1,4 +1,4 @@
-import { Controller, Get, HttpCode, NotFoundException, Param, ParseUUIDPipe, Post } from '@nestjs/common';
+import { Body, Controller, Get, HttpCode, Patch, NotFoundException, Param, ParseUUIDPipe, Post } from '@nestjs/common';
 import { ClsService } from 'nestjs-cls';
 import { Public } from '../common/public.decorator';
 import { RateLimit } from '../common/rate-limit';
@@ -8,11 +8,13 @@ import { ScopeService } from '../tenancy/scope.service';
 import { LogAccess } from '../common/access-log.interceptor';
 import { removalUrl } from './removal-url';
 import { RemovalService } from './removal.service';
+import { CorrectDataDto } from './titular.dto';
+import { TitularService } from './titular.service';
 
 @Controller()
 export class RemovalController {
   constructor(
-    private readonly removal: RemovalService, private readonly prisma: PrismaService,
+    private readonly removal: RemovalService, private readonly titular: TitularService, private readonly prisma: PrismaService,
     private readonly scope: ScopeService, private readonly cls: ClsService,
   ) {}
 
@@ -21,6 +23,14 @@ export class RemovalController {
 
   @Public() @RateLimit({ name: 'remove', max: 10, windowMs: 60_000 }) @Post('public/remove-data/:token') @HttpCode(200)
   byToken(@Param('token', ParseUUIDPipe) token: string) { return this.removal.removeByToken(token); }
+
+  /** Acesso e portabilidade do titular (LGPD art. 18). */
+  @Public() @RateLimit({ name: 'my-data', max: 30, windowMs: 60_000 }) @Get('public/my-data/:token')
+  myData(@Param('token', ParseUUIDPipe) token: string) { return this.titular.export(token); }
+
+  /** Correção pelo titular. */
+  @Public() @RateLimit({ name: 'my-data-fix', max: 10, windowMs: 60_000 }) @Patch('public/my-data/:token')
+  correct(@Param('token', ParseUUIDPipe) token: string, @Body() dto: CorrectDataDto) { return this.titular.correct(token, dto); }
 
   /** Link público de descadastro para entregar ao titular (RF-22). */
   @Roles('CANDIDATO', 'COORD_GERAL', 'COORD_REGIAO', 'LIDERANCA') @Get('supporters/:id/removal-link') @LogAccess('supporter', 'REMOVAL_LINK')

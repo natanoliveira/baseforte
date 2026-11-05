@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 
-const PUBLIC = ['/login', '/remover-dados'];
+const PUBLIC = ['/login', '/remover-dados', '/meus-dados'];
 
 export function middleware(req: NextRequest) {
   const { pathname } = req.nextUrl;

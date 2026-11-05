@@ -5,6 +5,7 @@ import { PrivacyController } from './privacy.controller';
 import { RopaService } from './ropa.service';
 import { RemovalController } from './removal.controller';
 import { RemovalService } from './removal.service';
+import { TitularService } from './titular.service';
 
-@Module({ controllers: [RemovalController, PrivacyController], providers: [RemovalService, AuditService, RopaService, CloseCampaignService], exports: [RemovalService] })
+@Module({ controllers: [RemovalController, PrivacyController], providers: [RemovalService, TitularService, AuditService, RopaService, CloseCampaignService], exports: [RemovalService] })
 export class PrivacyModule {}

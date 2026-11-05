@@ -74,7 +74,7 @@ baseforte/
 Campaign (global), User, Region, Neighborhood (geom/centroid PostGIS), Leader (árvore `parentId`, `coordinatorId`), Supporter (`*Enc` Bytes, `mapPoint`, `removalToken`), Consent (append-only), AccessLog, RemovalRecord, VotingPlace, GeocodeCache (global). F2/F3 ainda sem modelos.
 
 ### Superfície da API (`/api/v1`)
-Pública: `health`, `auth/login|refresh`, `public/dpo/:slug`, `public/remove-data/:token`. Autenticada: `auth/logout|me`, `users`, `regions`, `neighborhoods`, `leaders` (+`tree`, `ranking`, `:id/move`), `supporters` (+`consents`, `revoke`), `communication/*`, `map/*`, `neighborhoods/:id/panel|report.pdf`, `geocode`, `privacy/*`.
+Pública: `health`, `auth/login|refresh`, `public/dpo/:slug`, `public/remove-data/:token`, `public/my-data/:token` (GET acesso/portabilidade, PATCH correção; `titular.service.ts`). Autenticada: `auth/logout|me`, `users`, `regions`, `neighborhoods`, `leaders` (+`tree`, `ranking`, `:id/move`), `supporters` (+`consents`, `revoke`), `communication/*`, `map/*`, `neighborhoods/:id/panel|report.pdf`, `geocode`, `privacy/*`.
 
 ### Matriz de papéis
 | Área | CANDIDATO/COORD_GERAL | COORD_REGIAO | LIDERANCA | AUDITOR |
