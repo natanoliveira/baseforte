@@ -1,0 +1,244 @@
+generator client {
+  provider        = "prisma-client-js"
+  previewFeatures = ["postgresqlExtensions"]
+}
+
+datasource db {
+  provider   = "postgresql"
+  url        = env("DATABASE_URL")
+  extensions = [postgis, pgcrypto]
+}
+
+enum Plan {
+  VEREADOR
+  PREFEITO
+}
+
+enum CampaignMode {
+  CAMPANHA
+  MANDATO
+}
+
+enum RetentionPolicy {
+  ANONIMIZAR
+  APAGAR
+}
+
+enum Role {
+  CANDIDATO
+  COORD_GERAL
+  COORD_REGIAO
+  LIDERANCA
+  AUDITOR
+}
+
+enum LeaderStatus {
+  ATIVO
+  FRIO
+  INATIVO
+}
+
+enum GeocodeStatus {
+  PENDING
+  OK
+  FAILED
+}
+
+model Campaign {
+  id              String          @id @default(uuid())
+  slug            String          @unique
+  name            String
+  plan            Plan            @default(VEREADOR)
+  mode            CampaignMode    @default(CAMPANHA)
+  spendingLimit   Decimal?        @db.Decimal(14, 2)
+  retentionPolicy RetentionPolicy @default(ANONIMIZAR)
+  closedAt        DateTime?
+  dpoName         String?
+  dpoEmail        String?
+  dpoContact      String?
+  createdAt       DateTime        @default(now())
+
+  users          User[]
+  regions        Region[]
+  neighborhoods  Neighborhood[]
+  leaders        Leader[]
+  supporters     Supporter[]
+  consents       Consent[]
+  accessLogs     AccessLog[]
+  removalRecords RemovalRecord[]
+  votingPlaces   VotingPlace[]
+}
+
+model User {
+  id           String   @id @default(uuid())
+  campaignId   String
+  email        String   @unique
+  passwordHash String
+  role         Role
+  name         String
+  regionId     String?
+  refreshHash  String?
+  createdAt    DateTime @default(now())
+
+  campaign    Campaign @relation(fields: [campaignId], references: [id])
+  region      Region?  @relation(fields: [regionId], references: [id])
+  leader      Leader?
+  coordinated Leader[] @relation("Coordinator")
+
+  @@index([campaignId])
+}
+
+model Region {
+  id         String @id @default(uuid())
+  campaignId String
+  name       String
+
+  campaign      Campaign       @relation(fields: [campaignId], references: [id])
+  neighborhoods Neighborhood[]
+  users         User[]
+
+  @@index([campaignId])
+}
+
+model Neighborhood {
+  id         String                                      @id @default(uuid())
+  campaignId String
+  regionId   String
+  name       String
+  geom       Unsupported("geometry(MultiPolygon,4326)")?
+  centroid   Unsupported("geometry(Point,4326)")?
+
+  campaign   Campaign      @relation(fields: [campaignId], references: [id])
+  region     Region        @relation(fields: [regionId], references: [id])
+  leaders    Leader[]
+  supporters Supporter[]
+  places     VotingPlace[]
+
+  @@index([campaignId])
+}
+
+model Leader {
+  id             String        @id @default(uuid())
+  campaignId     String
+  userId         String        @unique
+  parentId       String?
+  coordinatorId  String?
+  neighborhoodId String
+  name           String
+  phoneEnc       Bytes?
+  zones          String[]
+  sections       String[]
+  goal           Int           @default(0)
+  statusOverride LeaderStatus?
+  lastActivityAt DateTime?
+  createdAt      DateTime      @default(now())
+
+  campaign     Campaign     @relation(fields: [campaignId], references: [id])
+  user         User         @relation(fields: [userId], references: [id])
+  coordinator  User?        @relation("Coordinator", fields: [coordinatorId], references: [id])
+  parent       Leader?      @relation("Tree", fields: [parentId], references: [id])
+  children     Leader[]     @relation("Tree")
+  neighborhood Neighborhood @relation(fields: [neighborhoodId], references: [id])
+  supporters   Supporter[]
+
+  @@index([campaignId])
+  @@index([parentId])
+  @@index([neighborhoodId])
+}
+
+model Supporter {
+  id             String                               @id @default(uuid())
+  campaignId     String
+  leaderId       String
+  neighborhoodId String
+  name           String
+  phoneEnc       Bytes?
+  phoneHash      String?
+  cpfEnc         Bytes?
+  addressEnc     Bytes?
+  locationEnc    Bytes?
+  mapPoint       Unsupported("geometry(Point,4326)")?
+  jitterSeed     Int
+  geocodeStatus  GeocodeStatus                        @default(PENDING)
+  anonymizedAt   DateTime?
+  removalToken   String                               @unique @default(uuid())
+  createdAt      DateTime                             @default(now())
+
+  campaign     Campaign     @relation(fields: [campaignId], references: [id])
+  leader       Leader       @relation(fields: [leaderId], references: [id])
+  neighborhood Neighborhood @relation(fields: [neighborhoodId], references: [id])
+  consents     Consent[]
+
+  @@index([campaignId])
+  @@index([leaderId])
+  @@index([neighborhoodId])
+  @@index([campaignId, phoneHash])
+}
+
+model Consent {
+  id            String    @id @default(uuid())
+  campaignId    String
+  supporterId   String
+  grantedAt     DateTime  @default(now())
+  channel       String
+  purpose       String
+  textVersion   String
+  textAccepted  String
+  collectedById String
+  revokedAt     DateTime?
+
+  campaign  Campaign  @relation(fields: [campaignId], references: [id])
+  supporter Supporter @relation(fields: [supporterId], references: [id])
+
+  @@index([campaignId])
+  @@index([supporterId])
+}
+
+model AccessLog {
+  id         String   @id @default(uuid())
+  campaignId String
+  userId     String?
+  role       Role?
+  resource   String
+  resourceId String?
+  action     String
+  outcome    String   @default("OK")
+  at         DateTime @default(now())
+
+  campaign Campaign @relation(fields: [campaignId], references: [id])
+
+  @@index([campaignId, at])
+}
+
+model RemovalRecord {
+  id            String   @id @default(uuid())
+  campaignId    String
+  supporterHash String
+  reason        String?
+  at            DateTime @default(now())
+
+  campaign Campaign @relation(fields: [campaignId], references: [id])
+
+  @@index([campaignId])
+}
+
+model VotingPlace {
+  id             String                               @id @default(uuid())
+  campaignId     String
+  neighborhoodId String
+  name           String
+  location       Unsupported("geometry(Point,4326)")?
+
+  campaign     Campaign     @relation(fields: [campaignId], references: [id])
+  neighborhood Neighborhood @relation(fields: [neighborhoodId], references: [id])
+
+  @@index([campaignId])
+}
+
+model GeocodeCache {
+  id        String   @id @default(uuid())
+  queryHash String   @unique
+  lat       Float?
+  lng       Float?
+  at        DateTime @default(now())
+}

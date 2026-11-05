@@ -1,0 +1,10 @@
+node_modules
+dist
+.env
+.next
+*.log
+/data
+api/fixtures/*.pmtiles
+web/public/map/*.pmtiles
+playwright-report
+test-results

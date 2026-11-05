@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="pt-BR" data-theme="light"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>BaseForte: fluxos e regras</title>
+<link href="https://fonts.googleapis.com/css2?family=Young+Serif&family=Instrument+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root{--paper:#F3EEE2;--paper-2:#EAE3D2;--card:#FBF8F0;--ink:#12241F;--ink-2:#3E4F49;--ink-3:#6E7B76;--line:#D6CDB8;--brand:#0F4C45;--accent:#D99A1E;--display:'Young Serif',Georgia,serif;--body:'Instrument Sans',system-ui,sans-serif;--mono:'IBM Plex Mono',monospace}
+*{box-sizing:border-box;margin:0}
+body{background:var(--paper);color:var(--ink);font:400 15px/1.55 var(--body);background-image:radial-gradient(circle at 1px 1px,var(--line) 1px,transparent 0);background-size:22px 22px}
+.layout{display:grid;grid-template-columns:240px 1fr;gap:32px;max-width:1280px;margin:0 auto;padding:0 28px 96px}
+nav{position:sticky;top:0;align-self:start;padding:48px 0;display:flex;flex-direction:column;gap:2px;max-height:100vh;overflow:auto}
+nav b{font:500 11px var(--mono);letter-spacing:.14em;text-transform:uppercase;color:var(--ink-3);margin-bottom:10px}
+nav a{color:var(--ink-2);text-decoration:none;font-size:14px;padding:6px 10px;border-radius:6px;border:1px solid transparent}
+nav a:hover{background:var(--card);border-color:var(--line);color:var(--ink)}
+header{padding:56px 0 20px;border-bottom:2px solid var(--ink)}
+h1{font:400 clamp(36px,6vw,64px)/1.05 var(--display)} h1 em{font-style:normal;color:var(--brand)}
+h2{font:400 28px/1.15 var(--display);margin:40px 0 6px}
+.lead{color:var(--ink-2);max-width:68ch;margin-bottom:16px}
+.card{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:20px;box-shadow:0 1px 0 rgba(18,36,31,.06),0 8px 24px -12px rgba(18,36,31,.25);overflow:auto}
+.mermaid{display:flex;justify-content:center;font-family:var(--body)}
+.legend{display:flex;gap:18px;flex-wrap:wrap;margin-top:14px;font:12px var(--mono);color:var(--ink-3)}
+@media(max-width:900px){.layout{grid-template-columns:1fr}nav{position:static;padding:24px 0}}
+</style></head><body><div class="layout"><nav><b>Diagramas</b><a href="#s0">Arquitetura</a><a href="#s1">Jornada de uso por papel</a><a href="#s2">Cadastro de apoiador</a><a href="#s3">Descadastro do titular</a><a href="#s4">Regras de acesso a cada requisição</a><a href="#s5">Privacidade da posição no mapa</a><a href="#s6">Status da liderança</a><a href="#s7">Mover liderança na árvore</a><a href="#s8">Ciclo da campanha</a><a href="#s9">Demanda da comunidade</a><a href="#s10">Comunicação com consentimento</a></nav><main>
+<header><div style="font:500 11px var(--mono);letter-spacing:.14em;text-transform:uppercase;color:var(--ink-3)">Fluxos de uso e regras</div><h1>Base<em>Forte</em>, passo a passo</h1>
+<div class="legend"><span>◆ losango = decisão</span><span>retângulo = ação</span><span>cilindro = banco</span><span>403 = papel sem permissão · 404 = fora do escopo</span></div></header>
+<section id="s0"><h2>Arquitetura</h2><p class="lead">Quem fala com quem. A API é a única que toca o banco; o mapa nunca recebe dado pessoal exato.</p><div class="card"><pre class="mermaid">flowchart LR
+  U[Navegador / PWA] --&gt;|HTTPS, cookie httpOnly| W[Web Next.js :3006]
+  W --&gt;|API REST /api/v1| A[API NestJS :3001]
+  A --&gt; P[(PostgreSQL + PostGIS + pgcrypto)]
+  A --&gt; R[(Redis)]
+  R --&gt; Q[Fila BullMQ: geocodificação]
+  Q --&gt;|1 req/s, cache no banco| N[Nominatim]
+  W -.-&gt;|estilo online| T[OpenFreeMap]
+  W -.-&gt;|sem rede| F[Fallback local: bairros em GeoJSON e PMTiles]</pre></div></section>
+<section id="s1"><h2>Jornada de uso por papel</h2><p class="lead">O que cada papel enxerga ao entrar. O fluxo do e2e é: login, mapa, filtrar bairro, abrir liderança, registrar visita.</p><div class="card"><pre class="mermaid">flowchart TD
+  L[Login com e-mail e senha] --&gt; R{Papel}
+  R --&gt;|Candidato ou Coord. geral| A[Mapa de toda a campanha]
+  R --&gt;|Coord. de região| B[Mapa só da sua região]
+  R --&gt;|Liderança| C[Só a própria base e a própria agenda]
+  R --&gt;|Auditor LGPD| D[Logs e consentimentos, só leitura]
+  A --&gt; A1[Filtrar bairro ou status] --&gt; A2[Painel lateral do bairro] --&gt; A3[Abrir liderança] --&gt; A4[Registrar visita]
+  B --&gt; B1[Filtrar bairro da região] --&gt; A2
+  C --&gt; C1[Cadastrar apoiador com consentimento] --&gt; C2[Ver rota do dia] --&gt; C3[Check-in da visita]
+  D --&gt; D1[Filtrar logs de acesso] --&gt; D2[Conferir consentimentos]</pre></div></section>
+<section id="s2"><h2>Cadastro de apoiador</h2><p class="lead">Sem consentimento não há cadastro. A posição vai para o mapa sempre com deslocamento.</p><div class="card"><pre class="mermaid">flowchart TD
+  S([Novo apoiador]) --&gt; F[Preencher nome, bairro e contato]
+  F --&gt; C{Consentimento registrado?}
+  C --&gt;|Não| X[Bloqueado: erro CONSENT_REQUIRED]
+  C --&gt;|Sim| P{Telefone já existe?}
+  P --&gt;|Sim| W[Alerta de duplicidade, não bloqueia]
+  P --&gt;|Não| G
+  W --&gt; G[Salvar com telefone, CPF e endereço cifrados]
+  G --&gt; L{Tem coordenada?}
+  L --&gt;|Sim| J[Guardar exato cifrado e ponto de mapa com jitter]
+  L --&gt;|Não| Q[Fila de geocodificação, 1 por segundo]
+  Q --&gt; Y{Encontrou?}
+  Y --&gt;|Sim| J
+  Y --&gt;|Não| M[Usuário clica no mapa para posicionar]
+  M --&gt; J
+  J --&gt; O[Atualiza a atividade da liderança]
+  O --&gt; Z([Apoiador na base e na lista de comunicação])</pre></div></section>
+<section id="s3"><h2>Descadastro do titular</h2><p class="lead">Um clique, sem login. Dados pessoais somem; sobra só um registro mínimo como prova.</p><div class="card"><pre class="mermaid">sequenceDiagram
+  actor T as Titular
+  participant W as Página pública
+  participant A as API
+  participant D as Banco
+  T-&gt;&gt;W: Abre o link remover-dados com o token
+  W-&gt;&gt;A: GET info do token
+  A--&gt;&gt;W: Nome da campanha e se já foi removido
+  T-&gt;&gt;W: Confirma em 1 clique
+  W-&gt;&gt;A: POST remover dados
+  A-&gt;&gt;D: Revoga consentimentos
+  A-&gt;&gt;D: Anonimiza nome, telefone, CPF, endereço e localização
+  A-&gt;&gt;D: Grava registro mínimo (hash, data, motivo)
+  A-&gt;&gt;D: Grava log de acesso REMOVE
+  A--&gt;&gt;W: removido
+  Note over A,D: Repetir o pedido responde 200 sem novo log
+  A-&gt;&gt;D: Apoiador some de todas as listas e do mapa</pre></div></section>
+<section id="s4"><h2>Regras de acesso a cada requisição</h2><p class="lead">A ordem importa: cada etapa pode barrar. Papel sem permissão na rota recebe 403; registro fora do escopo recebe 404.</p><div class="card"><pre class="mermaid">flowchart TD
+  R([Requisição]) --&gt; J{Token JWT válido?}
+  J --&gt;|Não| E1[401]
+  J --&gt;|Sim| T[Define a campanha do usuário]
+  T --&gt; P{Papel permitido nesta rota?}
+  P --&gt;|Não| E2[403]
+  P --&gt;|Sim| S{Escopo do papel}
+  S --&gt;|Candidato, Coord. geral| S1[Tudo da campanha]
+  S --&gt;|Coord. de região| S2[Bairros da sua região]
+  S --&gt;|Liderança| S3[Sua subárvore de lideranças]
+  S1 --&gt; K
+  S2 --&gt; K
+  S3 --&gt; K{Registro dentro do escopo?}
+  K --&gt;|Não| E3[404 e log DENIED]
+  K --&gt;|Sim| D{Dado sensível?}
+  D --&gt;|Lista ou mapa| D1[Nunca decifra: sem telefone, endereço ou coordenada exata]
+  D --&gt;|Detalhe do cadastro| D2[Decifra e grava log de acesso]
+  D1 --&gt; OK([Resposta])
+  D2 --&gt; OK</pre></div></section>
+<section id="s5"><h2>Privacidade da posição no mapa</h2><p class="lead">O mapa lê só o ponto deslocado. A coordenada exata fica cifrada e só aparece no detalhe.</p><div class="card"><pre class="mermaid">flowchart LR
+  E[Coordenada exata] --&gt; C[Cifrada com pgcrypto]
+  E --&gt; J[Jitter de 30 a 200 m, fixo por apoiador]
+  J --&gt; M[Ponto de mapa]
+  M --&gt; MAP[API do mapa e camadas: pins, calor, bairro]
+  C --&gt; DET[Detalhe do cadastro]
+  DET --&gt; AUT{Papel autorizado?}
+  AUT --&gt;|Sim| SHOW[Mostra endereço e posição exata e grava log]
+  AUT --&gt;|Não| HID[Campos vêm nulos]</pre></div></section>
+<section id="s6"><h2>Status da liderança</h2><p class="lead">Calculado pela última atividade. O coordenador pode fixar o status à mão.</p><div class="card"><pre class="mermaid">stateDiagram-v2
+  [*] --&gt; Inativo: sem atividade
+  Inativo --&gt; Ativo: nova atividade
+  Ativo --&gt; Frio: 15 dias sem atividade
+  Frio --&gt; Inativo: 46 dias sem atividade
+  Frio --&gt; Ativo: nova atividade
+  Ativo --&gt; Ativo: atividade em até 14 dias
+  note right of Ativo: Override manual vence a regra até ser removido</pre></div></section>
+<section id="s7"><h2>Mover liderança na árvore</h2><p class="lead">Arrastar leva junto toda a subárvore. Ciclos e destinos fora do escopo são barrados.</p><div class="card"><pre class="mermaid">flowchart TD
+  A([Arrastar liderança para um novo pai ou coordenador]) --&gt; B{Destino no seu escopo?}
+  B --&gt;|Não| X1[Rejeita: 422]
+  B --&gt;|Sim| C{Destino está dentro da própria subárvore?}
+  C --&gt;|Sim| X2[Rejeita: criaria ciclo]
+  C --&gt;|Não| D{Coordenador de outra região?}
+  D --&gt;|Sim| X3[Rejeita para Coord. de região]
+  D --&gt;|Não| E[Atualiza pai e leva os descendentes]
+  E --&gt; F[Grava 1 log MOVE na mesma transação]</pre></div></section>
+<section id="s8"><h2>Ciclo da campanha</h2><p class="lead">Mandato muda rótulos e módulos. Encerrar é irreversível e aplica a política de retenção.</p><div class="card"><pre class="mermaid">stateDiagram-v2
+  [*] --&gt; Campanha
+  Campanha --&gt; Mandato: alternar modo
+  Mandato --&gt; Campanha: alternar modo
+  Campanha --&gt; Encerrada: encerrar, com confirmação dupla
+  Mandato --&gt; Encerrada: encerrar, com confirmação dupla
+  Encerrada --&gt; [*]
+  note right of Encerrada: Retenção da campanha define anonimizar (padrão) ou apagar todos os apoiadores</pre></div></section>
+<section id="s9"><h2>Demanda da comunidade</h2><p class="lead">Só vira resolvida com o retorno dado ao cidadão registrado.</p><div class="card"><pre class="mermaid">stateDiagram-v2
+  [*] --&gt; Aberta: registrar pedido com bairro, pin e foto
+  Aberta --&gt; Encaminhada: encaminhar ao responsável
+  Encaminhada --&gt; Resolvida: informar o retorno ao cidadão
+  Resolvida --&gt; [*]</pre></div></section>
+<section id="s10"><h2>Comunicação com consentimento</h2><p class="lead">Nada de disparo em massa: só link individual, enviado manualmente pelo usuário.</p><div class="card"><pre class="mermaid">flowchart TD
+  A([Quero falar com um apoiador]) --&gt; B{Consentimento ativo e cadastro não anonimizado?}
+  B --&gt;|Não| X[Fora da lista, sem link: erro CONSENT_REQUIRED]
+  B --&gt;|Sim| C{Tem telefone?}
+  C --&gt;|Não| Y[Sem link]
+  C --&gt;|Sim| D[Gerar link wa.me individual e gravar log]
+  D --&gt; E[Usuário abre e envia manualmente no WhatsApp]</pre></div></section>
+</main></div>
+<script type="module">
+import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.esm.min.mjs';
+mermaid.initialize({startOnLoad:true,securityLevel:'strict',theme:'base',flowchart:{curve:'basis',htmlLabels:true},
+themeVariables:{fontFamily:'Instrument Sans, system-ui, sans-serif',fontSize:'14px',primaryColor:'#EAE3D2',primaryTextColor:'#12241F',primaryBorderColor:'#0F4C45',lineColor:'#3E4F49',secondaryColor:'#FBF8F0',tertiaryColor:'#F3EEE2',noteBkgColor:'#F3D78E',noteTextColor:'#2A1C00',actorBkg:'#EAE3D2',actorBorder:'#0F4C45',signalColor:'#3E4F49'}});
+</script></body></html>

@@ -1,0 +1,227 @@
+<!DOCTYPE html>
+<html lang="pt-BR" data-theme="light">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>BaseForte: Design System</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Young+Serif&family=Instrument+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root{
+  --paper:#F3EEE2; --paper-2:#EAE3D2; --card:#FBF8F0; --ink:#12241F; --ink-2:#3E4F49; --ink-3:#6E7B76;
+  --line:#D6CDB8; --brand:#0F4C45; --brand-ink:#F3EEE2; --accent:#D99A1E; --accent-ink:#2A1C00;
+  --ok:#2F7D5B; --cold:#C98A1B; --off:#7C8782; --danger:#B2452F; --info:#2F6580;
+  --ch-0:#B2452F; --ch-1:#D4814A; --ch-2:#E3C170; --ch-3:#A9BE7A; --ch-4:#4E9A6B;
+  --r:10px; --shadow:0 1px 0 rgba(18,36,31,.06),0 8px 24px -12px rgba(18,36,31,.25);
+  --display:'Young Serif',Georgia,serif; --body:'Instrument Sans',system-ui,sans-serif; --mono:'IBM Plex Mono',ui-monospace,monospace;
+}
+[data-theme=dark]{
+  --paper:#0C1815; --paper-2:#12221E; --card:#162A25; --ink:#EFE9DA; --ink-2:#B9C2BC; --ink-3:#85938D;
+  --line:#294039; --brand:#58B59F; --brand-ink:#07211C; --accent:#E8AE3A; --accent-ink:#2A1C00;
+  --ok:#5CBF92; --cold:#E0A63A; --off:#8E9994; --danger:#E0715A; --info:#6FAECB;
+  --shadow:0 1px 0 rgba(0,0,0,.4),0 10px 28px -12px rgba(0,0,0,.7);
+}
+*{box-sizing:border-box;margin:0}
+body{background:var(--paper);color:var(--ink);font:400 15px/1.55 var(--body);
+  background-image:radial-gradient(circle at 1px 1px,var(--line) 1px,transparent 0);background-size:22px 22px}
+h1,h2,h3{font-family:var(--display);font-weight:400;letter-spacing:-.01em;line-height:1.1}
+.wrap{max-width:1120px;margin:0 auto;padding:0 28px 96px}
+header.top{display:flex;justify-content:space-between;align-items:flex-end;padding:56px 0 28px;border-bottom:2px solid var(--ink);margin-bottom:8px}
+header.top h1{font-size:clamp(40px,7vw,76px)}
+header.top h1 em{font-style:normal;color:var(--brand)}
+.eyebrow{font:500 11px/1 var(--mono);letter-spacing:.14em;text-transform:uppercase;color:var(--ink-3)}
+.toggle{font:500 12px var(--mono);background:var(--card);color:var(--ink);border:1px solid var(--line);border-radius:99px;padding:8px 14px;cursor:pointer}
+section{padding:44px 0 8px;animation:rise .6s both}
+section:nth-of-type(2){animation-delay:.05s}section:nth-of-type(3){animation-delay:.1s}
+@keyframes rise{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:none}}
+section>h2{font-size:30px;margin:6px 0 4px}
+section>p.lead{color:var(--ink-2);max-width:62ch;margin-bottom:22px}
+.grid{display:grid;gap:16px}.g2{grid-template-columns:repeat(auto-fit,minmax(320px,1fr))}.g3{grid-template-columns:repeat(auto-fit,minmax(220px,1fr))}
+.card{background:var(--card);border:1px solid var(--line);border-radius:var(--r);padding:20px;box-shadow:var(--shadow)}
+.card h3{font-size:18px;margin-bottom:12px}
+.sw{display:grid;grid-template-columns:repeat(auto-fill,minmax(130px,1fr));gap:12px}
+.sw div{border-radius:var(--r);border:1px solid var(--line);overflow:hidden;background:var(--card)}
+.sw i{display:block;height:64px}.sw b{display:block;padding:8px 10px 0;font-size:13px}.sw code{display:block;padding:0 10px 10px;font:12px var(--mono);color:var(--ink-3)}
+.type-row{display:flex;align-items:baseline;gap:18px;padding:12px 0;border-bottom:1px dashed var(--line)}
+.type-row span{flex:0 0 96px}
+/* controls */
+.btn{font:600 14px var(--body);border-radius:8px;border:1.5px solid var(--ink);padding:10px 16px;cursor:pointer;background:var(--card);color:var(--ink);transition:transform .12s,box-shadow .12s}
+.btn:hover{transform:translate(-1px,-1px);box-shadow:3px 3px 0 var(--ink)}
+.btn:focus-visible,.in:focus-visible,.chk:focus-visible{outline:3px solid var(--accent);outline-offset:2px}
+.btn.pri{background:var(--brand);color:var(--brand-ink);border-color:var(--brand)}
+.btn.pri:hover{box-shadow:3px 3px 0 var(--accent)}
+.btn.dng{background:transparent;color:var(--danger);border-color:var(--danger)}
+.btn[disabled]{opacity:.45;pointer-events:none}
+.row{display:flex;flex-wrap:wrap;gap:10px;align-items:center}
+label.f{display:block;font:600 12px var(--body);margin-bottom:6px;color:var(--ink-2)}
+.in{width:100%;font:400 15px var(--body);padding:10px 12px;border-radius:8px;border:1.5px solid var(--line);background:var(--paper);color:var(--ink)}
+.in.err{border-color:var(--danger)}.hint{font-size:12px;color:var(--ink-3);margin-top:4px}.hint.err{color:var(--danger)}
+.chk{display:flex;gap:10px;align-items:flex-start;font-size:13px;color:var(--ink-2);background:var(--paper-2);padding:12px;border-radius:8px;border:1px solid var(--line)}
+.chk input{margin-top:3px;accent-color:var(--brand)}
+/* badges */
+.badge{display:inline-flex;align-items:center;gap:6px;font:600 12px var(--body);padding:4px 10px;border-radius:99px;border:1px solid currentColor}
+.badge::before{content:"";width:8px;height:8px;border-radius:50%;background:currentColor}
+.b-ok{color:var(--ok)}.b-cold{color:var(--cold)}.b-off{color:var(--off)}.b-info{color:var(--info)}.b-dng{color:var(--danger)}
+/* banner */
+.banner{display:flex;gap:10px;align-items:center;background:var(--accent);color:var(--accent-ink);font:600 13px var(--body);padding:10px 16px;border-radius:8px}
+.alert{border:1.5px solid var(--danger);background:color-mix(in srgb,var(--danger) 10%,var(--card));padding:12px 14px;border-radius:8px;font-size:14px}
+.alert::before{content:"!";display:inline-grid;place-items:center;width:20px;height:20px;margin-right:8px;border-radius:50%;background:var(--danger);color:var(--card);font:700 12px var(--mono)}
+.alert.warn{border-color:var(--cold);background:color-mix(in srgb,var(--cold) 12%,var(--card))}
+.alert.warn::before{background:var(--cold)}
+/* map bits */
+.legend{display:flex;height:14px;border-radius:99px;overflow:hidden;border:1px solid var(--line)}.legend i{flex:1}
+.scale{display:flex;justify-content:space-between;font:11px var(--mono);color:var(--ink-3);margin-top:6px}
+.pins{display:flex;align-items:flex-end;gap:22px}
+.pin{border-radius:50%;border:2.5px solid var(--card);box-shadow:0 2px 6px rgba(0,0,0,.35)}
+.cluster{display:grid;place-items:center;border-radius:50%;font:600 13px var(--mono);color:var(--brand-ink);background:var(--brand);box-shadow:0 0 0 6px color-mix(in srgb,var(--brand) 28%,transparent)}
+.hatch{height:84px;border-radius:var(--r);border:2px dashed var(--danger);background:repeating-linear-gradient(45deg,color-mix(in srgb,var(--danger) 22%,transparent) 0 6px,transparent 6px 12px);display:grid;place-items:center;font:600 13px var(--mono);color:var(--danger)}
+.heat{height:84px;border-radius:var(--r);background:radial-gradient(circle at 30% 50%,rgba(217,154,30,.95),transparent 40%),radial-gradient(circle at 62% 40%,rgba(178,69,47,.9),transparent 34%),radial-gradient(circle at 80% 65%,rgba(47,125,91,.55),transparent 38%),var(--paper-2)}
+.privacy{display:inline-flex;gap:8px;align-items:center;font:500 12px var(--mono);background:var(--paper-2);border:1px dashed var(--ink-3);padding:6px 10px;border-radius:6px}
+.mask{font-family:var(--mono);letter-spacing:.08em}
+/* table + org */
+table{width:100%;border-collapse:collapse;font-size:14px}
+th{text-align:left;font:500 11px var(--mono);letter-spacing:.1em;text-transform:uppercase;color:var(--ink-3);padding:8px 6px;border-bottom:2px solid var(--ink)}
+td{padding:11px 6px;border-bottom:1px solid var(--line)}
+.rk{font:400 22px var(--display);color:var(--brand)}
+.bar{height:8px;background:var(--paper-2);border-radius:99px;overflow:hidden;min-width:90px}.bar i{display:block;height:100%;background:var(--brand)}
+.org{display:flex;flex-direction:column;align-items:center;gap:0}
+.node{background:var(--card);border:1.5px solid var(--ink);border-radius:8px;padding:8px 14px;font-size:13px;text-align:center;min-width:130px}
+.node small{display:block;font:11px var(--mono);color:var(--ink-3)}.node.sel{background:var(--brand);color:var(--brand-ink);border-color:var(--brand)}.node.sel small{color:inherit;opacity:.8}
+.vline{width:2px;height:18px;background:var(--ink)}
+.kids{display:flex;gap:14px;padding-top:0;position:relative}
+.kids::before{content:"";position:absolute;top:0;left:15%;right:15%;height:2px;background:var(--ink)}
+.kids>div{display:flex;flex-direction:column;align-items:center}
+.drop{border:2px dashed var(--accent);background:color-mix(in srgb,var(--accent) 14%,transparent)}
+.tabs{display:flex;gap:4px;border-bottom:1.5px solid var(--line);margin-bottom:14px}
+.tab{padding:8px 12px;font:600 13px var(--body);color:var(--ink-3);border-bottom:3px solid transparent;margin-bottom:-1.5px}.tab.on{color:var(--ink);border-color:var(--accent)}
+.stat{font:400 34px var(--display)}.stat small{display:block;font:500 11px var(--mono);letter-spacing:.1em;text-transform:uppercase;color:var(--ink-3)}
+@media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+</style>
+</head>
+<body>
+<div class="wrap">
+<header class="top">
+  <div>
+    <div class="eyebrow">Design system · v0.1 · apartidário</div>
+    <h1>Base<em>Forte</em></h1>
+  </div>
+  <button class="toggle" onclick="const h=document.documentElement;h.dataset.theme=h.dataset.theme==='dark'?'light':'dark'">◐ claro / escuro</button>
+</header>
+
+<section>
+  <div class="eyebrow">Direção</div>
+  <h2>Atlas de campanha</h2>
+  <p class="lead">Papel de mapa, tinta verde-azulada e um açafrão de destaque. Nenhuma cor de partido: sem azul, vermelho ou verde-amarelo como identidade. Vermelho→verde só aparece como escala de dados (meta atingida) e sempre com rótulo.</p>
+  <div class="sw">
+    <div><i style="background:var(--paper)"></i><b>Papel</b><code>--paper</code></div>
+    <div><i style="background:var(--card)"></i><b>Cartão</b><code>--card</code></div>
+    <div><i style="background:var(--ink)"></i><b>Tinta</b><code>--ink</code></div>
+    <div><i style="background:var(--brand)"></i><b>Marca</b><code>--brand</code></div>
+    <div><i style="background:var(--accent)"></i><b>Açafrão</b><code>--accent</code></div>
+    <div><i style="background:var(--ok)"></i><b>Ativo</b><code>--ok</code></div>
+    <div><i style="background:var(--cold)"></i><b>Frio</b><code>--cold</code></div>
+    <div><i style="background:var(--off)"></i><b>Inativo</b><code>--off</code></div>
+    <div><i style="background:var(--danger)"></i><b>Erro / vazio</b><code>--danger</code></div>
+    <div><i style="background:var(--info)"></i><b>Info</b><code>--info</code></div>
+  </div>
+</section>
+
+<section>
+  <div class="eyebrow">Tipografia</div>
+  <h2>Serifa com voz, texto limpo</h2>
+  <div class="card">
+    <div class="type-row"><span class="eyebrow">Display 48</span><div style="font:400 48px var(--display)">Quem cobre o bairro?</div></div>
+    <div class="type-row"><span class="eyebrow">Título 30</span><div style="font:400 30px var(--display)">Lideranças da região Norte</div></div>
+    <div class="type-row"><span class="eyebrow">Título 18</span><div style="font:400 18px var(--display)">Painel do bairro</div></div>
+    <div class="type-row"><span class="eyebrow">Corpo 15</span><div>Cada apoiador tem consentimento registrado antes de entrar em qualquer lista.</div></div>
+    <div class="type-row"><span class="eyebrow">Mono 12</span><div style="font:12px var(--mono)">LGPD art. 5º, II · consentimento v3 · 12/03/2027</div></div>
+  </div>
+</section>
+
+<section>
+  <div class="eyebrow">Componentes</div>
+  <h2>Controles e estados</h2>
+  <div class="grid g2" style="margin-top:16px">
+    <div class="card"><h3>Botões</h3>
+      <div class="row"><button class="btn pri">Salvar liderança</button><button class="btn">Cancelar</button><button class="btn dng">Encerrar campanha</button><button class="btn" disabled>Desabilitado</button></div>
+      <p class="hint" style="margin-top:12px">Foco visível em açafrão (3px). Hover desloca 1px com sombra sólida.</p>
+    </div>
+    <div class="card"><h3>Status da liderança</h3>
+      <div class="row"><span class="badge b-ok">Ativo</span><span class="badge b-cold">Frio</span><span class="badge b-off">Inativo</span><span class="badge b-info">Encaminhada</span><span class="badge b-dng">Sem posição</span></div>
+      <p class="hint" style="margin-top:12px">Cor + ponto + texto: nunca só cor.</p>
+    </div>
+    <div class="card"><h3>Formulário com consentimento</h3>
+      <label class="f">Nome</label><input class="in" value="Maria Exemplo" style="margin-bottom:12px">
+      <label class="f">Telefone</label><input class="in err" value="(86) 9" style="margin-bottom:2px"><div class="hint err">Telefone incompleto.</div>
+      <label class="chk" style="margin-top:14px"><input class="chk" type="checkbox"> <span>Autorizo o uso do meu contato para comunicação sobre esta campanha. Posso revogar a qualquer momento.<br><span class="mask hint">texto v3 · canal: presencial</span></span></label>
+      <div class="row" style="margin-top:14px"><button class="btn pri" disabled>Cadastrar apoiador</button><span class="hint">Habilita só com consentimento.</span></div>
+    </div>
+    <div class="card"><h3>Avisos</h3>
+      <div class="banner">⚖ Este sistema não substitui orientação jurídica eleitoral.</div>
+      <div class="alert warn" style="margin-top:12px"><b>80% do limite de gastos.</b> Restam R$ 4.000,00.</div>
+      <div class="alert" style="margin-top:12px"><b>Limite do plano atingido:</b> 100 lideranças.</div>
+    </div>
+  </div>
+</section>
+
+<section>
+  <div class="eyebrow">Mapa</div>
+  <h2>Vocabulário do mapa</h2>
+  <p class="lead">Pin = cor por status, tamanho por apoiadores. Posição sempre aproximada (~200 m); endereço exato nunca aparece no mapa.</p>
+  <div class="grid g3">
+    <div class="card"><h3>Pins</h3>
+      <div class="pins">
+        <div class="pin" style="width:16px;height:16px;background:var(--ok)"></div>
+        <div class="pin" style="width:26px;height:26px;background:var(--cold)"></div>
+        <div class="pin" style="width:38px;height:38px;background:var(--off)"></div>
+        <div class="cluster" style="width:48px;height:48px">42</div>
+      </div>
+      <p class="hint" style="margin-top:12px">Pequeno → grande; cluster com contagem.</p>
+    </div>
+    <div class="card"><h3>Coroplético · % da meta</h3>
+      <div class="legend"><i style="background:var(--ch-0)"></i><i style="background:var(--ch-1)"></i><i style="background:var(--ch-2)"></i><i style="background:var(--ch-3)"></i><i style="background:var(--ch-4)"></i></div>
+      <div class="scale"><span>0%</span><span>50%</span><span>100%+</span></div>
+      <div class="legend" style="margin-top:12px;height:14px;background:var(--off);opacity:.5"></div><div class="scale"><span>sem meta</span></div>
+    </div>
+    <div class="card"><h3>Mapa de calor</h3><div class="heat"></div><p class="hint" style="margin-top:8px">Densidade de apoiadores.</p></div>
+    <div class="card"><h3>Bairro vazio</h3><div class="hatch">SEM LIDERANÇA</div><p class="hint" style="margin-top:8px">Hachura + borda tracejada.</p></div>
+    <div class="card"><h3>Privacidade</h3>
+      <p><span class="privacy">◎ posição aproximada · ~200 m</span></p>
+      <p style="margin-top:12px">Endereço: <span class="mask">•••••••••••• (restrito)</span></p>
+      <p class="hint" style="margin-top:8px">Dado sensível mascarado por padrão.</p>
+    </div>
+    <div class="card"><h3>Painel do bairro</h3>
+      <div class="tabs"><span class="tab on">Resumo</span><span class="tab">Lideranças</span><span class="tab">Lacunas</span></div>
+      <div class="row" style="gap:28px"><div class="stat">3<small>lideranças</small></div><div class="stat">148<small>apoiadores</small></div></div>
+    </div>
+  </div>
+</section>
+
+<section>
+  <div class="eyebrow">Pirâmide</div>
+  <h2>Ranking e organograma</h2>
+  <div class="grid g2" style="margin-top:16px">
+    <div class="card"><h3>Ranking</h3>
+      <table><thead><tr><th>#</th><th>Liderança</th><th>Meta</th><th>Status</th></tr></thead><tbody>
+        <tr><td class="rk">1</td><td>Ana Teste<br><span class="hint">Centro</span></td><td><div class="bar"><i style="width:112%;max-width:100%"></i></div><span class="hint">112%</span></td><td><span class="badge b-ok">Ativo</span></td></tr>
+        <tr><td class="rk">2</td><td>Bruno Demo<br><span class="hint">Norte</span></td><td><div class="bar"><i style="width:64%"></i></div><span class="hint">64%</span></td><td><span class="badge b-cold">Frio</span></td></tr>
+        <tr><td class="rk">3</td><td>Carla Fictícia<br><span class="hint">Sul</span></td><td><div class="bar"><i style="width:18%"></i></div><span class="hint">18%</span></td><td><span class="badge b-off">Inativo</span></td></tr>
+      </tbody></table>
+    </div>
+    <div class="card"><h3>Organograma (arrastar para reatribuir)</h3>
+      <div class="org">
+        <div class="node">Coord. geral<small>1</small></div><div class="vline"></div>
+        <div class="node">Coord. região Norte<small>10 lideranças</small></div><div class="vline"></div>
+        <div class="kids">
+          <div><div class="vline"></div><div class="node sel">Ana Teste<small>arrastando</small></div></div>
+          <div><div class="vline"></div><div class="node drop">soltar aqui<small>novo pai</small></div></div>
+          <div><div class="vline"></div><div class="node">Bruno Demo<small>64 apoiadores</small></div></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+</div>
+</body>
+</html>

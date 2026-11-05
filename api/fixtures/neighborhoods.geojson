@@ -1,0 +1,531 @@
+{
+ "type": "FeatureCollection",
+ "note": "Polígonos ILUSTRATIVOS (grade aproximada), não são limites oficiais.",
+ "features": [
+  {
+   "type": "Feature",
+   "properties": {
+    "name": "Centro",
+    "region": "Norte",
+    "illustrative": true
+   },
+   "geometry": {
+    "type": "Polygon",
+    "coordinates": [
+     [
+      [
+       -42.8596,
+       -5.0762
+      ],
+      [
+       -42.8364,
+       -5.0762
+      ],
+      [
+       -42.8364,
+       -5.0503
+      ],
+      [
+       -42.8596,
+       -5.0503
+      ],
+      [
+       -42.8596,
+       -5.0762
+      ]
+     ]
+    ]
+   }
+  },
+  {
+   "type": "Feature",
+   "properties": {
+    "name": "Fátima",
+    "region": "Norte",
+    "illustrative": true
+   },
+   "geometry": {
+    "type": "Polygon",
+    "coordinates": [
+     [
+      [
+       -42.8356,
+       -5.0762
+      ],
+      [
+       -42.8124,
+       -5.0762
+      ],
+      [
+       -42.8124,
+       -5.0503
+      ],
+      [
+       -42.8356,
+       -5.0503
+      ],
+      [
+       -42.8356,
+       -5.0762
+      ]
+     ]
+    ]
+   }
+  },
+  {
+   "type": "Feature",
+   "properties": {
+    "name": "Jóquei",
+    "region": "Norte",
+    "illustrative": true
+   },
+   "geometry": {
+    "type": "Polygon",
+    "coordinates": [
+     [
+      [
+       -42.8116,
+       -5.0762
+      ],
+      [
+       -42.788399999999996,
+       -5.0762
+      ],
+      [
+       -42.788399999999996,
+       -5.0503
+      ],
+      [
+       -42.8116,
+       -5.0503
+      ],
+      [
+       -42.8116,
+       -5.0762
+      ]
+     ]
+    ]
+   }
+  },
+  {
+   "type": "Feature",
+   "properties": {
+    "name": "Ilhotas",
+    "region": "Norte",
+    "illustrative": true
+   },
+   "geometry": {
+    "type": "Polygon",
+    "coordinates": [
+     [
+      [
+       -42.7876,
+       -5.0762
+      ],
+      [
+       -42.764399999999995,
+       -5.0762
+      ],
+      [
+       -42.764399999999995,
+       -5.0503
+      ],
+      [
+       -42.7876,
+       -5.0503
+      ],
+      [
+       -42.7876,
+       -5.0762
+      ]
+     ]
+    ]
+   }
+  },
+  {
+   "type": "Feature",
+   "properties": {
+    "name": "Piçarra",
+    "region": "Norte",
+    "illustrative": true
+   },
+   "geometry": {
+    "type": "Polygon",
+    "coordinates": [
+     [
+      [
+       -42.763600000000004,
+       -5.0762
+      ],
+      [
+       -42.7404,
+       -5.0762
+      ],
+      [
+       -42.7404,
+       -5.0503
+      ],
+      [
+       -42.763600000000004,
+       -5.0503
+      ],
+      [
+       -42.763600000000004,
+       -5.0762
+      ]
+     ]
+    ]
+   }
+  },
+  {
+   "type": "Feature",
+   "properties": {
+    "name": "São Cristóvão",
+    "region": "Oeste",
+    "illustrative": true
+   },
+   "geometry": {
+    "type": "Polygon",
+    "coordinates": [
+     [
+      [
+       -42.8596,
+       -5.1029
+      ],
+      [
+       -42.8364,
+       -5.1029
+      ],
+      [
+       -42.8364,
+       -5.077
+      ],
+      [
+       -42.8596,
+       -5.077
+      ],
+      [
+       -42.8596,
+       -5.1029
+      ]
+     ]
+    ]
+   }
+  },
+  {
+   "type": "Feature",
+   "properties": {
+    "name": "Dirceu",
+    "region": "Oeste",
+    "illustrative": true
+   },
+   "geometry": {
+    "type": "Polygon",
+    "coordinates": [
+     [
+      [
+       -42.8356,
+       -5.1029
+      ],
+      [
+       -42.8124,
+       -5.1029
+      ],
+      [
+       -42.8124,
+       -5.077
+      ],
+      [
+       -42.8356,
+       -5.077
+      ],
+      [
+       -42.8356,
+       -5.1029
+      ]
+     ]
+    ]
+   }
+  },
+  {
+   "type": "Feature",
+   "properties": {
+    "name": "Morada Nova",
+    "region": "Oeste",
+    "illustrative": true
+   },
+   "geometry": {
+    "type": "Polygon",
+    "coordinates": [
+     [
+      [
+       -42.8116,
+       -5.1029
+      ],
+      [
+       -42.788399999999996,
+       -5.1029
+      ],
+      [
+       -42.788399999999996,
+       -5.077
+      ],
+      [
+       -42.8116,
+       -5.077
+      ],
+      [
+       -42.8116,
+       -5.1029
+      ]
+     ]
+    ]
+   }
+  },
+  {
+   "type": "Feature",
+   "properties": {
+    "name": "Santa Isabel",
+    "region": "Leste",
+    "illustrative": true
+   },
+   "geometry": {
+    "type": "Polygon",
+    "coordinates": [
+     [
+      [
+       -42.7876,
+       -5.1029
+      ],
+      [
+       -42.764399999999995,
+       -5.1029
+      ],
+      [
+       -42.764399999999995,
+       -5.077
+      ],
+      [
+       -42.7876,
+       -5.077
+      ],
+      [
+       -42.7876,
+       -5.1029
+      ]
+     ]
+    ]
+   }
+  },
+  {
+   "type": "Feature",
+   "properties": {
+    "name": "Mocambinho",
+    "region": "Leste",
+    "illustrative": true
+   },
+   "geometry": {
+    "type": "Polygon",
+    "coordinates": [
+     [
+      [
+       -42.763600000000004,
+       -5.1029
+      ],
+      [
+       -42.7404,
+       -5.1029
+      ],
+      [
+       -42.7404,
+       -5.077
+      ],
+      [
+       -42.763600000000004,
+       -5.077
+      ],
+      [
+       -42.763600000000004,
+       -5.1029
+      ]
+     ]
+    ]
+   }
+  },
+  {
+   "type": "Feature",
+   "properties": {
+    "name": "Pedra Mole",
+    "region": "Sul",
+    "illustrative": true
+   },
+   "geometry": {
+    "type": "Polygon",
+    "coordinates": [
+     [
+      [
+       -42.8596,
+       -5.1296
+      ],
+      [
+       -42.8364,
+       -5.1296
+      ],
+      [
+       -42.8364,
+       -5.1037
+      ],
+      [
+       -42.8596,
+       -5.1037
+      ],
+      [
+       -42.8596,
+       -5.1296
+      ]
+     ]
+    ]
+   }
+  },
+  {
+   "type": "Feature",
+   "properties": {
+    "name": "Redenção",
+    "region": "Sul",
+    "illustrative": true
+   },
+   "geometry": {
+    "type": "Polygon",
+    "coordinates": [
+     [
+      [
+       -42.8356,
+       -5.1296
+      ],
+      [
+       -42.8124,
+       -5.1296
+      ],
+      [
+       -42.8124,
+       -5.1037
+      ],
+      [
+       -42.8356,
+       -5.1037
+      ],
+      [
+       -42.8356,
+       -5.1296
+      ]
+     ]
+    ]
+   }
+  },
+  {
+   "type": "Feature",
+   "properties": {
+    "name": "Itararé",
+    "region": "Sul",
+    "illustrative": true
+   },
+   "geometry": {
+    "type": "Polygon",
+    "coordinates": [
+     [
+      [
+       -42.8116,
+       -5.1296
+      ],
+      [
+       -42.788399999999996,
+       -5.1296
+      ],
+      [
+       -42.788399999999996,
+       -5.1037
+      ],
+      [
+       -42.8116,
+       -5.1037
+      ],
+      [
+       -42.8116,
+       -5.1296
+      ]
+     ]
+    ]
+   }
+  },
+  {
+   "type": "Feature",
+   "properties": {
+    "name": "Satélite",
+    "region": "Sul",
+    "illustrative": true
+   },
+   "geometry": {
+    "type": "Polygon",
+    "coordinates": [
+     [
+      [
+       -42.7876,
+       -5.1296
+      ],
+      [
+       -42.764399999999995,
+       -5.1296
+      ],
+      [
+       -42.764399999999995,
+       -5.1037
+      ],
+      [
+       -42.7876,
+       -5.1037
+      ],
+      [
+       -42.7876,
+       -5.1296
+      ]
+     ]
+    ]
+   }
+  },
+  {
+   "type": "Feature",
+   "properties": {
+    "name": "Água Mineral",
+    "region": "Sul",
+    "illustrative": true
+   },
+   "geometry": {
+    "type": "Polygon",
+    "coordinates": [
+     [
+      [
+       -42.763600000000004,
+       -5.1296
+      ],
+      [
+       -42.7404,
+       -5.1296
+      ],
+      [
+       -42.7404,
+       -5.1037
+      ],
+      [
+       -42.763600000000004,
+       -5.1037
+      ],
+      [
+       -42.763600000000004,
+       -5.1296
+      ]
+     ]
+    ]
+   }
+  }
+ ]
+}

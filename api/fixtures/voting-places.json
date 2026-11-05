@@ -1,0 +1,242 @@
+[
+ {
+  "name": "Escola Exemplo 01",
+  "neighborhood": "Centro",
+  "lng": -42.854,
+  "lat": -5.06726
+ },
+ {
+  "name": "Escola Exemplo 02",
+  "neighborhood": "Centro",
+  "lng": -42.848,
+  "lat": -5.06325
+ },
+ {
+  "name": "Escola Exemplo 03",
+  "neighborhood": "Centro",
+  "lng": -42.842,
+  "lat": -5.05924
+ },
+ {
+  "name": "Escola Exemplo 04",
+  "neighborhood": "Fátima",
+  "lng": -42.83,
+  "lat": -5.06726
+ },
+ {
+  "name": "Escola Exemplo 05",
+  "neighborhood": "Fátima",
+  "lng": -42.824,
+  "lat": -5.06325
+ },
+ {
+  "name": "Escola Exemplo 06",
+  "neighborhood": "Fátima",
+  "lng": -42.818,
+  "lat": -5.05924
+ },
+ {
+  "name": "Escola Exemplo 07",
+  "neighborhood": "Jóquei",
+  "lng": -42.806,
+  "lat": -5.06726
+ },
+ {
+  "name": "Escola Exemplo 08",
+  "neighborhood": "Jóquei",
+  "lng": -42.8,
+  "lat": -5.06325
+ },
+ {
+  "name": "Escola Exemplo 09",
+  "neighborhood": "Jóquei",
+  "lng": -42.794,
+  "lat": -5.05924
+ },
+ {
+  "name": "Escola Exemplo 10",
+  "neighborhood": "Ilhotas",
+  "lng": -42.782,
+  "lat": -5.06726
+ },
+ {
+  "name": "Escola Exemplo 11",
+  "neighborhood": "Ilhotas",
+  "lng": -42.776,
+  "lat": -5.06325
+ },
+ {
+  "name": "Escola Exemplo 12",
+  "neighborhood": "Ilhotas",
+  "lng": -42.77,
+  "lat": -5.05924
+ },
+ {
+  "name": "Escola Exemplo 13",
+  "neighborhood": "Piçarra",
+  "lng": -42.758,
+  "lat": -5.06726
+ },
+ {
+  "name": "Escola Exemplo 14",
+  "neighborhood": "Piçarra",
+  "lng": -42.752,
+  "lat": -5.06325
+ },
+ {
+  "name": "Escola Exemplo 15",
+  "neighborhood": "Piçarra",
+  "lng": -42.746,
+  "lat": -5.05924
+ },
+ {
+  "name": "Escola Exemplo 16",
+  "neighborhood": "São Cristóvão",
+  "lng": -42.854,
+  "lat": -5.09396
+ },
+ {
+  "name": "Escola Exemplo 17",
+  "neighborhood": "São Cristóvão",
+  "lng": -42.848,
+  "lat": -5.08995
+ },
+ {
+  "name": "Escola Exemplo 18",
+  "neighborhood": "São Cristóvão",
+  "lng": -42.842,
+  "lat": -5.08594
+ },
+ {
+  "name": "Escola Exemplo 19",
+  "neighborhood": "Dirceu",
+  "lng": -42.83,
+  "lat": -5.09396
+ },
+ {
+  "name": "Escola Exemplo 20",
+  "neighborhood": "Dirceu",
+  "lng": -42.824,
+  "lat": -5.08995
+ },
+ {
+  "name": "Escola Exemplo 21",
+  "neighborhood": "Dirceu",
+  "lng": -42.818,
+  "lat": -5.08594
+ },
+ {
+  "name": "Escola Exemplo 22",
+  "neighborhood": "Morada Nova",
+  "lng": -42.806,
+  "lat": -5.09396
+ },
+ {
+  "name": "Escola Exemplo 23",
+  "neighborhood": "Morada Nova",
+  "lng": -42.8,
+  "lat": -5.08995
+ },
+ {
+  "name": "Escola Exemplo 24",
+  "neighborhood": "Morada Nova",
+  "lng": -42.794,
+  "lat": -5.08594
+ },
+ {
+  "name": "Escola Exemplo 25",
+  "neighborhood": "Santa Isabel",
+  "lng": -42.782,
+  "lat": -5.09396
+ },
+ {
+  "name": "Escola Exemplo 26",
+  "neighborhood": "Santa Isabel",
+  "lng": -42.776,
+  "lat": -5.08995
+ },
+ {
+  "name": "Escola Exemplo 27",
+  "neighborhood": "Santa Isabel",
+  "lng": -42.77,
+  "lat": -5.08594
+ },
+ {
+  "name": "Escola Exemplo 28",
+  "neighborhood": "Mocambinho",
+  "lng": -42.758,
+  "lat": -5.09396
+ },
+ {
+  "name": "Escola Exemplo 29",
+  "neighborhood": "Mocambinho",
+  "lng": -42.752,
+  "lat": -5.08995
+ },
+ {
+  "name": "Escola Exemplo 30",
+  "neighborhood": "Mocambinho",
+  "lng": -42.746,
+  "lat": -5.08594
+ },
+ {
+  "name": "Escola Exemplo 31",
+  "neighborhood": "Pedra Mole",
+  "lng": -42.854,
+  "lat": -5.12066
+ },
+ {
+  "name": "Escola Exemplo 32",
+  "neighborhood": "Pedra Mole",
+  "lng": -42.848,
+  "lat": -5.11665
+ },
+ {
+  "name": "Escola Exemplo 33",
+  "neighborhood": "Redenção",
+  "lng": -42.83,
+  "lat": -5.12066
+ },
+ {
+  "name": "Escola Exemplo 34",
+  "neighborhood": "Redenção",
+  "lng": -42.824,
+  "lat": -5.11665
+ },
+ {
+  "name": "Escola Exemplo 35",
+  "neighborhood": "Itararé",
+  "lng": -42.806,
+  "lat": -5.12066
+ },
+ {
+  "name": "Escola Exemplo 36",
+  "neighborhood": "Itararé",
+  "lng": -42.8,
+  "lat": -5.11665
+ },
+ {
+  "name": "Escola Exemplo 37",
+  "neighborhood": "Satélite",
+  "lng": -42.782,
+  "lat": -5.12066
+ },
+ {
+  "name": "Escola Exemplo 38",
+  "neighborhood": "Satélite",
+  "lng": -42.776,
+  "lat": -5.11665
+ },
+ {
+  "name": "Escola Exemplo 39",
+  "neighborhood": "Água Mineral",
+  "lng": -42.758,
+  "lat": -5.12066
+ },
+ {
+  "name": "Escola Exemplo 40",
+  "neighborhood": "Água Mineral",
+  "lng": -42.752,
+  "lat": -5.11665
+ }
+]
