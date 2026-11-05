@@ -1,0 +1,12 @@
+{
+  "version": 8,
+  "name": "BaseForte offline",
+  "sources": {
+    "bairros": { "type": "geojson", "data": "/map/neighborhoods.geojson" }
+  },
+  "layers": [
+    { "id": "bg", "type": "background", "paint": { "background-color": "#eef2f0" } },
+    { "id": "bairros-fill", "type": "fill", "source": "bairros", "paint": { "fill-color": "#d5e3dc", "fill-opacity": 0.8 } },
+    { "id": "bairros-line", "type": "line", "source": "bairros", "paint": { "line-color": "#6b8f80", "line-width": 1 } }
+  ]
+}

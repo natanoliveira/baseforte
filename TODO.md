@@ -1,15 +1,14 @@
 # TODO BaseForte
 
-Fonte: `docs/specs/baseforte-mvp/tasks.md` (marcar `[x]` lá ao concluir). Estado: **T01–T25 prontos** (backend F1).
+Fonte: `docs/specs/baseforte-mvp/tasks.md` (marcar `[x]` lá ao concluir). Estado: **T01–T26 prontos** (backend F1 + web shell).
 
 ## Antes de continuar
 - [ ] Code review do diff atual (opus: toca auth, schema/migrations e >300 linhas)
-- [ ] Rodar `/cartographer` (mudança estrutural grande: monorepo novo) e `graphify update .` se houver grafo
+- [x] `/cartographer` rodado em 2026-11-05 (`docs/CODEBASE_MAP.md`); rodar `graphify update .` se houver grafo
 - [ ] Ambiente: `docker compose up -d db redis` (Postgres 5433, Redis 6380); `.env` a partir de `.env.example`; `npx prisma migrate deploy && npx prisma db seed` em `api/`
 
 ## F1: telas e qualidade
-- [ ] T26 Web shell (Next 14, Tailwind, shadcn, porta 3006, login, middleware, banner jurídico) — dep T06
-- [ ] T27 Mapa base web (MapLibre, estilo online/fallback offline, `fallback-style.json`, PMTiles) — dep T26
+- [ ] T27 Mapa base web (MapLibre, estilo online/fallback offline, `fallback-style.json`, PMTiles) — dep T26 — código e build ok; falta validar visualmente (Chrome desconectado) e `pmtiles://` real
 - [ ] T28 Camadas do mapa (pins, cluster, calor, coroplético, vazios, locais de votação) — dep T27
 - [ ] T29 Filtros, painel lateral e export PNG/PDF — dep T28
 - [ ] T30 Telas de lideranças (lista, ranking, organograma com dnd-kit) — dep T26
