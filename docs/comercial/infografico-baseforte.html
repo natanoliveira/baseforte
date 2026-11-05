@@ -1,0 +1,226 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>BaseForte — Gestão de lideranças e campanha</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Sora:wght@400;600;800&family=DM+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#07121f;--card:#0d1f33;--line:#1c3350;--tx:#e8f0f8;--mut:#8aa3bd;--g:#22c88a;--a:#ffb020;--b:#3b9eff;--r:#ff5d6c}
+*{box-sizing:border-box;margin:0}
+body{background:var(--bg);color:var(--tx);font:16px/1.55 "DM Sans",sans-serif}
+.w{max-width:1080px;margin:0 auto;padding:0 24px}
+h1,h2,h3{font-family:Sora,sans-serif;line-height:1.15}
+h2{font-size:clamp(26px,4vw,38px);margin-bottom:10px}
+.eyebrow{color:var(--g);font:600 13px Sora;letter-spacing:.14em;text-transform:uppercase;margin-bottom:10px}
+.lead{color:var(--mut);max-width:640px;margin-bottom:36px}
+section{padding:72px 0;border-top:1px solid var(--line)}
+.hero{padding:80px 0 56px;background:radial-gradient(900px 400px at 80% -10%,#15446b55,transparent),radial-gradient(700px 400px at 0 0,#22c88a22,transparent);border:0}
+.hero h1{font-size:clamp(36px,6.5vw,66px);font-weight:800;max-width:780px}
+.hero h1 span{color:var(--g)}
+.hero p{color:var(--mut);font-size:19px;max-width:620px;margin:20px 0 28px}
+.pills{display:flex;flex-wrap:wrap;gap:10px}
+.pill{border:1px solid var(--line);background:#0d1f33aa;border-radius:99px;padding:6px 14px;font-size:14px;color:var(--tx)}
+.pill b{color:var(--g)}
+.hero svg{width:100%;height:auto;margin-top:44px;border-radius:20px;border:1px solid var(--line)}
+.grid{display:grid;gap:18px;grid-template-columns:repeat(auto-fit,minmax(240px,1fr))}
+.card{background:var(--card);border:1px solid var(--line);border-radius:18px;padding:24px}
+.card h3{font-size:19px;margin:12px 0 6px}
+.card p{color:var(--mut);font-size:15px}
+.ic{width:46px;height:46px;border-radius:12px;display:grid;place-items:center;font-size:22px;background:linear-gradient(135deg,#22c88a33,#3b9eff33)}
+.tag{display:inline-block;font:600 11px Sora;padding:3px 10px;border-radius:99px;margin-top:12px}
+.ok{background:#22c88a22;color:var(--g)}.soon{background:#ffb02022;color:var(--a)}
+.two{display:grid;gap:36px;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));align-items:center}
+.stats{display:grid;gap:14px;grid-template-columns:repeat(auto-fit,minmax(150px,1fr))}
+.stat{text-align:center;padding:22px 10px;border-radius:16px;background:var(--card);border:1px solid var(--line)}
+.stat b{display:block;font:800 36px Sora;color:var(--g)}
+.stat span{color:var(--mut);font-size:13px}
+.roles{display:flex;flex-direction:column;gap:10px}
+.role{display:flex;justify-content:space-between;gap:12px;background:var(--card);border:1px solid var(--line);border-radius:12px;padding:12px 16px;font-size:15px}
+.role em{color:var(--mut);font-style:normal;font-size:14px}
+.steps{counter-reset:s;display:grid;gap:14px;grid-template-columns:repeat(auto-fit,minmax(210px,1fr))}
+.step{counter-increment:s;position:relative;padding:22px;background:var(--card);border:1px solid var(--line);border-radius:16px}
+.step:before{content:counter(s);font:800 30px Sora;color:var(--a)}
+.step p{color:var(--mut);font-size:14px;margin-top:4px}
+.pitch{background:linear-gradient(135deg,#0f3a2f,#0d2a4a);border:1px solid #2a6a5a;border-radius:28px;padding:clamp(28px,5vw,56px)}
+.pitch h2{font-size:clamp(28px,4.5vw,44px)}
+.pitch ul{list-style:none;padding:0;margin:22px 0;display:grid;gap:12px}
+.pitch li{padding-left:34px;position:relative}
+.pitch li:before{content:"✓";position:absolute;left:0;top:0;width:24px;height:24px;border-radius:50%;background:var(--g);color:#05261b;font-weight:800;display:grid;place-items:center;font-size:14px}
+.quote{background:#ffffff0d;border-radius:14px;padding:16px 20px;margin:24px 0;font:600 20px/1.4 Sora}
+.cta{display:inline-block;background:var(--g);color:#05261b;font:800 17px Sora;padding:14px 28px;border-radius:14px;text-decoration:none}
+.vs{width:100%;border-collapse:collapse;font-size:15px}
+.vs th,.vs td{padding:12px 14px;text-align:left;border-bottom:1px solid var(--line)}
+.vs th{color:var(--mut);font-weight:600}.vs td:last-child{color:var(--g);font-weight:600}.vs td:nth-child(2){color:var(--mut)}
+footer{padding:36px 0;color:var(--mut);font-size:13px;border-top:1px solid var(--line)}
+</style>
+</head>
+<body>
+
+<section class="hero"><div class="w">
+  <div class="eyebrow">Apartidário · Multi-tenant · LGPD nativo</div>
+  <h1>Cada liderança no mapa. <span>Cada voto com base sólida.</span></h1>
+  <p>BaseForte organiza a pirâmide de lideranças da campanha, mostra onde você é forte e onde há vazios no território, e protege os dados de apoiadores desde o primeiro cadastro.</p>
+  <div class="pills"><span class="pill"><b>4</b> níveis de hierarquia</span><span class="pill"><b>5</b> papéis com escopo</span><span class="pill"><b>100%</b> pt-BR</span><span class="pill"><b>R$ 0</b> em mapas e tiles</span></div>
+
+  <svg viewBox="0 0 1000 420" role="img" aria-label="Mapa de lideranças por bairro">
+    <defs>
+      <linearGradient id="bgm" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#0b2540"/><stop offset="1" stop-color="#0a1a2d"/></linearGradient>
+      <radialGradient id="heat"><stop offset="0" stop-color="#ff5d6c" stop-opacity=".7"/><stop offset="1" stop-color="#ff5d6c" stop-opacity="0"/></radialGradient>
+      <filter id="gl"><feGaussianBlur stdDeviation="3"/></filter>
+    </defs>
+    <rect width="1000" height="420" fill="url(#bgm)"/>
+    <path d="M0 300 C200 250 300 340 520 290 S860 230 1000 280 V420 H0Z" fill="#0f3a5c" opacity=".5"/>
+    <g stroke="#1f4a73" stroke-width="2" fill-opacity=".85">
+      <path d="M60 60 L260 40 L300 160 L120 190Z" fill="#1f8f63"/>
+      <path d="M260 40 L470 70 L450 200 L300 160Z" fill="#8fbf3f"/>
+      <path d="M470 70 L690 50 L720 190 L450 200Z" fill="#e0b030"/>
+      <path d="M690 50 L930 90 L900 210 L720 190Z" fill="#d9772e"/>
+      <path d="M120 190 L300 160 L450 200 L420 340 L150 330Z" fill="#2fa56f"/>
+      <path d="M450 200 L720 190 L700 350 L420 340Z" fill="#c9482f" stroke-dasharray="6 5"/>
+      <path d="M720 190 L900 210 L930 340 L700 350Z" fill="#a9c23a"/>
+    </g>
+    <circle cx="560" cy="270" r="90" fill="url(#heat)" filter="url(#gl)"/>
+    <circle cx="250" cy="110" r="70" fill="url(#heat)" opacity=".5" filter="url(#gl)"/>
+    <g fill="#fff" stroke="#07121f" stroke-width="3">
+      <circle cx="200" cy="120" r="14" fill="#22c88a"/><circle cx="370" cy="120" r="20" fill="#22c88a"/>
+      <circle cx="580" cy="130" r="12" fill="#ffb020"/><circle cx="800" cy="140" r="16" fill="#22c88a"/>
+      <circle cx="280" cy="260" r="22" fill="#22c88a"/><circle cx="600" cy="280" r="26" fill="#22c88a"/>
+      <circle cx="830" cy="270" r="10" fill="#8aa3bd"/>
+    </g>
+    <g font-family="Sora,sans-serif" font-size="13" font-weight="600" fill="#fff">
+      <text x="520" y="330" fill="#ffd9dc">⚠ vazio: sem liderança</text>
+    </g>
+    <g transform="translate(24,360)" font-family=""DM Sans",sans-serif" font-size="12" fill="#cfe0f0">
+      <rect width="330" height="44" rx="10" fill="#07121fcc"/>
+      <rect x="14" y="14" width="90" height="10" rx="5" fill="#c9482f"/><rect x="104" y="14" width="40" height="10" fill="#e0b030"/><rect x="144" y="14" width="60" height="10" rx="5" fill="#22c88a"/>
+      <text x="14" y="36">0% da meta</text><text x="170" y="36">100% da meta atingida</text>
+    </g>
+    <text x="976" y="402" text-anchor="end" font-family="DM Sans" font-size="11" fill="#8aa3bd">Ilustração — dados fictícios</text>
+  </svg>
+</div></section>
+
+<section><div class="w">
+  <div class="eyebrow">O problema</div>
+  <h2>Campanha cresce no improviso. Base vira planilha.</h2>
+  <p class="lead">Lideranças espalhadas em grupos de mensagens, metas sem acompanhamento e dados pessoais de eleitores sem controle. Um incidente de privacidade ou um bairro esquecido custa caro.</p>
+  <table class="vs">
+    <tr><th>Hoje</th><th>Planilha + WhatsApp</th><th>Com BaseForte</th></tr>
+    <tr><td>Quem lidera cada bairro?</td><td>Ninguém sabe ao certo</td><td>Pirâmide e mapa em tempo real</td></tr>
+    <tr><td>Onde falta base?</td><td>Intuição</td><td>Bairros "vazios" destacados</td></tr>
+    <tr><td>Dados de apoiadores</td><td>Soltos, sem consentimento</td><td>Criptografados, com consentimento e log</td></tr>
+    <tr><td>Quem vê o quê?</td><td>Todo mundo vê tudo</td><td>Escopo por papel e por região</td></tr>
+  </table>
+</div></section>
+
+<section><div class="w">
+  <div class="eyebrow">Funcionalidades</div>
+  <h2>Tudo que a coordenação precisa, em um lugar</h2>
+  <p class="lead">Núcleo de lideranças, mapa e conformidade LGPD já funcionam no backend. Telas e módulos seguintes estão em desenvolvimento, conforme o roteiro abaixo.</p>
+  <div class="grid">
+    <div class="card"><div class="ic">🔺</div><h3>Pirâmide de lideranças</h3><p>Coordenador-geral → região → liderança → apoiador, com metas, status e ranking de engajamento.</p><span class="tag ok">API pronta</span></div>
+    <div class="card"><div class="ic">🗺️</div><h3>Mapa inteligente</h3><p>Pins por status, calor de densidade, coroplético da meta por bairro e detecção de vazios. Sem custo de API.</p><span class="tag ok">API pronta · telas em breve</span></div>
+    <div class="card"><div class="ic">🛡️</div><h3>LGPD de ponta a ponta</h3><p>Consentimento registrado, dado sensível criptografado, descadastro em um clique e anonimização idempotente.</p><span class="tag ok">API pronta</span></div>
+    <div class="card"><div class="ic">🏢</div><h3>Multi-campanha isolado</h3><p>Cada campanha é um tenant separado. Planos Vereador e Prefeito com limites próprios.</p><span class="tag ok">API pronta</span></div>
+    <div class="card"><div class="ic">📅</div><h3>Agenda e visitas</h3><p>Check-in por geolocalização no celular e rota do dia por proximidade.</p><span class="tag soon">Fase 2</span></div>
+    <div class="card"><div class="ic">📣</div><h3>Demandas da comunidade</h3><p>Pedido com foto e pin no mapa; aberta, encaminhada, resolvida, com retorno ao cidadão.</p><span class="tag soon">Fase 2</span></div>
+    <div class="card"><div class="ic">📦</div><h3>Materiais e voluntários</h3><p>Estoque, entrega por liderança e escala de voluntários por evento.</p><span class="tag soon">Fase 3</span></div>
+    <div class="card"><div class="ic">💰</div><h3>Financeiro</h3><p>Receitas, despesas, alertas de limite em 80% e 100% e CSV organizado para prestação de contas.</p><span class="tag soon">Fase 3</span></div>
+    <div class="card"><div class="ic">🏛️</div><h3>Modo mandato</h3><p>Depois da eleição, a mesma base vira gestão de gabinete.</p><span class="tag soon">Fase 3</span></div>
+  </div>
+</div></section>
+
+<section><div class="w two">
+  <div>
+    <div class="eyebrow">Pirâmide</div>
+    <h2>Quem enxerga o quê</h2>
+    <p class="lead" style="margin-bottom:20px">Acesso fail-closed: toda rota exige papel. Liderança só vê a própria base.</p>
+    <div class="roles">
+      <div class="role"><span>Candidato · Coordenador-geral</span><em>vê tudo</em></div>
+      <div class="role"><span>Coordenador de região</span><em>só sua região</em></div>
+      <div class="role"><span>Liderança</span><em>só seus apoiadores</em></div>
+      <div class="role"><span>Auditor LGPD</span><em>leitura de logs</em></div>
+    </div>
+  </div>
+  <svg viewBox="0 0 420 340" role="img" aria-label="Pirâmide de lideranças">
+    <defs><linearGradient id="p1" x1="0" x2="1"><stop offset="0" stop-color="#22c88a"/><stop offset="1" stop-color="#3b9eff"/></linearGradient></defs>
+    <g font-family="Sora,sans-serif" font-weight="600" font-size="15" text-anchor="middle" fill="#05261b">
+      <path d="M210 14 L262 84 H158Z" fill="url(#p1)"/><text x="210" y="74">1</text>
+      <path d="M152 92 H268 L316 160 H104Z" fill="url(#p1)" opacity=".85"/><text x="210" y="142" fill="#04202e">Coord. regional</text>
+      <path d="M98 168 H322 L370 236 H50Z" fill="url(#p1)" opacity=".7"/><text x="210" y="218" fill="#04202e">Lideranças</text>
+      <path d="M44 244 H376 L410 316 H10Z" fill="url(#p1)" opacity=".5"/><text x="210" y="292" fill="#04202e">Apoiadores (com consentimento)</text>
+    </g>
+  </svg>
+</div></section>
+
+<section><div class="w two">
+  <svg viewBox="0 0 420 340" role="img" aria-label="Escudo de privacidade">
+    <defs><linearGradient id="sh" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#22c88a"/><stop offset="1" stop-color="#1b6fd1"/></linearGradient></defs>
+    <path d="M210 20 L360 70 V170 C360 250 290 300 210 322 C130 300 60 250 60 170 V70Z" fill="url(#sh)"/>
+    <path d="M210 44 L338 86 V170 C338 236 278 280 210 300 C142 280 82 236 82 170 V86Z" fill="#0a1f33"/>
+    <rect x="165" y="150" width="90" height="72" rx="12" fill="#22c88a"/>
+    <path d="M182 150 v-22 a28 28 0 0 1 56 0 v22" fill="none" stroke="#22c88a" stroke-width="12"/>
+    <circle cx="210" cy="182" r="9" fill="#0a1f33"/><rect x="206" y="186" width="8" height="20" rx="3" fill="#0a1f33"/>
+    <g fill="#ffb020"><circle cx="120" cy="260" r="6"/><circle cx="300" cy="120" r="5"/><circle cx="310" cy="250" r="4"/></g>
+  </svg>
+  <div>
+    <div class="eyebrow">Confiança</div>
+    <h2>Opinião política é dado sensível. Tratamos como tal.</h2>
+    <p class="lead" style="margin-bottom:18px">Conformidade não é um módulo à parte; está na base do produto.</p>
+    <div class="roles">
+      <div class="role"><span>Criptografia em repouso</span><em>telefone, CPF, endereço</em></div>
+      <div class="role"><span>Mapa com jitter ~200 m</span><em>nunca o endereço exato</em></div>
+      <div class="role"><span>Consentimento por apoiador</span><em>data, canal, finalidade</em></div>
+      <div class="role"><span>Descadastro em 1 clique</span><em>link público</em></div>
+      <div class="role"><span>Log de acesso + DPO + ROPA</span><em>exportável</em></div>
+    </div>
+  </div>
+</div></section>
+
+<section><div class="w">
+  <div class="eyebrow">Como funciona</div>
+  <h2>Do primeiro cadastro ao relatório do bairro</h2>
+  <p class="lead">Fluxo simples para a equipe de campo e para a coordenação.</p>
+  <div class="steps">
+    <div class="step"><h3>Monte a pirâmide</h3><p>Cadastre coordenadores e lideranças com meta e bairro de influência.</p></div>
+    <div class="step"><h3>Colete apoio com consentimento</h3><p>Cada apoiador entra com termo aceito e canal registrados.</p></div>
+    <div class="step"><h3>Veja no mapa</h3><p>Calor, metas por bairro e vazios mostram onde agir.</p></div>
+    <div class="step"><h3>Aja e preste contas</h3><p>Reatribua lideranças, exporte PNG/PDF e mantenha a auditoria em dia.</p></div>
+  </div>
+</div></section>
+
+<section><div class="w">
+  <div class="eyebrow">Estado do produto</div>
+  <h2>O que existe hoje</h2>
+  <p class="lead">Transparência: números do repositório nesta data.</p>
+  <div class="stats">
+    <div class="stat"><b>25</b><span>tarefas do backend F1 concluídas</span></div>
+    <div class="stat"><b>75</b><span>testes automatizados passando</span></div>
+    <div class="stat"><b>3</b><span>fases no roteiro (F1–F3)</span></div>
+    <div class="stat"><b>Teresina</b><span>cidade da demonstração</span></div>
+  </div>
+</div></section>
+
+<section><div class="w">
+  <div class="pitch">
+    <div class="eyebrow">Pitch de vendas</div>
+    <h2>Sua campanha só é tão forte quanto sua base. Enxergue-a.</h2>
+    <div class="quote">"Em minutos você sabe quem lidera cada bairro, quem está batendo a meta e onde ainda não há ninguém."</div>
+    <ul>
+      <li><b>Decisão com mapa, não com achismo.</b> Calor, metas por bairro e vazios territoriais num só painel.</li>
+      <li><b>Cada liderança prestando contas.</b> Meta, ranking e engajamento visíveis para a coordenação.</li>
+      <li><b>Risco jurídico sob controle.</b> Consentimento, criptografia, auditoria e descadastro prontos desde o dia um.</li>
+      <li><b>Qualquer partido.</b> Produto apartidário, sem ideologia nem candidato embutidos.</li>
+      <li><b>Custo de mapa zero.</b> Tiles abertos e fallback offline: sem chave de API nem conta paga.</li>
+      <li><b>Cresce com você.</b> Planos Vereador e Prefeito; agenda, demandas e financeiro chegam nas próximas fases.</li>
+    </ul>
+    <p style="color:#bcd5e8;margin-bottom:24px">Peça uma demonstração com os dados de Teresina e veja a pirâmide e o mapa funcionando.</p>
+    <a class="cta" href="#contato">Agendar demonstração →</a>
+    <p id="contato" style="margin-top:18px;color:#8fb3cf;font-size:14px">Contato comercial: <i>[inserir nome, e-mail e telefone]</i></p>
+  </div>
+</div></section>
+
+<footer><div class="w">BaseForte · Ilustrações e números de mapa são demonstrativos com dados fictícios. O envio oficial de prestação de contas é feito no sistema do TSE; o BaseForte apenas organiza os dados. Fases 2 e 3 em desenvolvimento.</div></footer>
+</body>
+</html>

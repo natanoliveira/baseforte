@@ -1,5 +1,6 @@
 import { cookies } from 'next/headers';
 import { redirect } from 'next/navigation';
+import Link from 'next/link';
 import { LogoutButton } from './logout-button';
 
 const API_URL = process.env.API_URL ?? 'http://localhost:3001';
@@ -21,7 +22,13 @@ export default async function AppLayout({ children }: { children: React.ReactNod
         O BaseForte não substitui orientação jurídica eleitoral.
       </div>
       <header className="flex items-center justify-between border-b bg-white px-6 py-3">
-        <strong className="text-brand-dark">BaseForte</strong>
+        <nav className="flex items-center gap-4 text-sm">
+          <strong className="text-brand-dark">BaseForte</strong>
+          <Link href="/mapa">Mapa</Link>
+          <Link href="/liderancas">Lideranças</Link>
+          <Link href="/apoiadores">Apoiadores</Link>
+          <Link href="/privacidade">Privacidade</Link>
+        </nav>
         <div className="flex items-center gap-3 text-sm">
           <span>{user.name} · {user.role}</span>
           <LogoutButton />

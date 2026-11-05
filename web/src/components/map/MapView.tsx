@@ -16,7 +16,7 @@ export function MapView({ onReady }: { onReady?: (map: Map) => void }) {
     maplibregl.addProtocol('pmtiles', protocol.tile);
     resolveStyle().then(({ style }) => {
       if (dead || !el.current) return;
-      const m = (map = new maplibregl.Map({ container: el.current, style, center: TERESINA, zoom: 11 }));
+      const m = (map = new maplibregl.Map({ container: el.current, style, center: TERESINA, zoom: 11, canvasContextAttributes: { preserveDrawingBuffer: true } }));
       m.addControl(new maplibregl.NavigationControl(), 'top-right');
       m.once('load', () => {
         el.current?.setAttribute('data-map-ready', 'true');

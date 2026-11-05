@@ -1,6 +1,8 @@
 # TODO BaseForte
 
-Fonte: `docs/specs/baseforte-mvp/tasks.md` (marcar `[x]` lá ao concluir). Estado: **T01–T26 prontos** (backend F1 + web shell).
+> **PAUSADO até nova ordem do usuário (2026-11-05):** não executar T33–T37, Dockerfiles, `make tiles`, F2 e F3. Só retomar quando o usuário pedir. Também pendente: validação visual de T27–T32 (Chrome desconectado) e code review do diff.
+
+Fonte: `docs/specs/baseforte-mvp/tasks.md` (marcar `[x]` lá ao concluir). Estado: **T01–T26 prontos**; T27–T32 feitos no código, sem validação visual.
 
 ## Antes de continuar
 - [ ] Code review do diff atual (opus: toca auth, schema/migrations e >300 linhas)
@@ -9,11 +11,11 @@ Fonte: `docs/specs/baseforte-mvp/tasks.md` (marcar `[x]` lá ao concluir). Estad
 
 ## F1: telas e qualidade
 - [ ] T27 Mapa base web (MapLibre, estilo online/fallback offline, `fallback-style.json`, PMTiles) — dep T26 — código e build ok; falta validar visualmente (Chrome desconectado) e `pmtiles://` real
-- [ ] T28 Camadas do mapa (pins, cluster, calor, coroplético, vazios, locais de votação) — dep T27
-- [ ] T29 Filtros, painel lateral e export PNG/PDF — dep T28
-- [ ] T30 Telas de lideranças (lista, ranking, organograma com dnd-kit) — dep T26
-- [ ] T31 Telas de apoiadores (form com consentimento, clique no mapa, `wa.me`) — dep T26
-- [ ] T32 Telas LGPD (DPO, ROPA, auditor, encerrar campanha, `/remover-dados/[token]`) — dep T26
+- [ ] T28 Camadas do mapa (pins, cluster, calor, coroplético, vazios, locais de votação) — dep T27 — código e build ok; validar visualmente
+- [ ] T29 Filtros, painel lateral e export PNG/PDF — dep T28 — código e build ok; validar visualmente (PNG/PDF)
+- [ ] T30 Telas de lideranças (lista, ranking, organograma com dnd-kit) — dep T26 — código, build e move via API ok; validar drag no navegador
+- [ ] T31 Telas de apoiadores (form com consentimento, clique no mapa, `wa.me`) — dep T26 — código, build e fluxo via API ok (422 sem consentimento, wa.me, revoke); falta validar no navegador e tela de detalhe com endereço (papéis autorizados)
+- [ ] T32 Telas LGPD (DPO, ROPA, auditor, encerrar campanha, `/remover-dados/[token]`) — dep T26 — código, build e API ok (DPO, ROPA csv/pdf, auditor 403 em PUT, descadastro público idempotente, confirmação dupla recusada); falta validar no navegador. Encerrar campanha real não foi executado (irreversível)
 - [ ] T33 Jest transversal (tenant, RBAC, privacidade do mapa, consentimento)
 - [ ] T34 Playwright (login → mapa → filtrar bairro → abrir liderança; liderança vê só a própria base; offline; descadastro)
 - [ ] T35 ESLint/Prettier: instalado mas **sem config**, `npm run lint` ainda falha

@@ -11,6 +11,7 @@
   },
   "dependencies": {
     "@baseforte/shared": "^0.1.0",
+    "@dnd-kit/core": "^6.3.1",
     "clsx": "^2.1.1",
     "maplibre-gl": "^6.16.0",
     "next": "^14.2.15",
