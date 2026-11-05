@@ -37,6 +37,6 @@ Fonte: `docs/specs/baseforte-mvp/tasks.md` (marcar `[x]` lá ao concluir). Estad
 
 ## Notas e decisões em aberto
 - OQ-01, OQ-02 e OQ-03 seguiram as propostas do `analysis.md`; reabrir se mudar.
-- Sem rate limit no login e no endpoint público de descadastro (token UUID); considerar antes de produção.
+- Rate limit em memória (login 5/min por IP+e-mail, descadastro 10/min por IP): trocar por Redis se a API rodar em várias instâncias.
 - Testes e2e da API precisam do Postgres e do Redis no ar.
 - Preview do design system: `previews/design-system.html`; fluxos: `previews/fluxos.html` (fonte: `docs/specs/baseforte-mvp/diagramas.md`).

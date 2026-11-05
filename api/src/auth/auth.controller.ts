@@ -1,6 +1,7 @@
 import { Body, Controller, Get, HttpCode, Post, Req, Res } from '@nestjs/common';
 import { Request, Response } from 'express';
 import { Public } from '../common/public.decorator';
+import { RateLimit } from '../common/rate-limit';
 import { AnyRole } from '../common/roles.decorator';
 import { TenantUser } from '../tenancy/tenant-context';
 import { LoginDto } from './auth.dto';
@@ -18,13 +19,13 @@ function setCookies(res: Response, t: { accessToken: string; refreshToken: strin
 export class AuthController {
   constructor(private readonly auth: AuthService) {}
 
-  @Public() @Post('login') @HttpCode(200)
+  @Public() @RateLimit({ name: 'login', max: 5, windowMs: 60_000, byEmail: true }) @Post('login') @HttpCode(200)
   async login(@Body() dto: LoginDto, @Res({ passthrough: true }) res: Response) {
     setCookies(res, await this.auth.login(dto.email, dto.password));
     return { ok: true };
   }
 
-  @Public() @Post('refresh') @HttpCode(200)
+  @Public() @RateLimit({ name: 'refresh', max: 30, windowMs: 60_000 }) @Post('refresh') @HttpCode(200)
   async refresh(@Req() req: Request, @Res({ passthrough: true }) res: Response) {
     setCookies(res, await this.auth.refresh(req.cookies?.refresh_token));
     return { ok: true };

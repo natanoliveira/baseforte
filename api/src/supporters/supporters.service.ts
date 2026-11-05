@@ -1,4 +1,5 @@
 import { Injectable, NotFoundException, UnprocessableEntityException } from '@nestjs/common';
+import { removalUrl } from '../privacy/removal-url';
 import { Prisma } from '@prisma/client';
 import { createHmac, randomInt } from 'crypto';
 import { ClsService } from 'nestjs-cls';
@@ -67,7 +68,7 @@ export class SupportersService {
     });
     if (dto.lat != null && dto.lng != null) await this.geo.setSupporterLocation(created.id, dto.lat, dto.lng, jitterSeed);
     const { removalToken, ...pub } = created;
-    return { ...pub, duplicatePhone };
+    return { ...pub, duplicatePhone, removalUrl: removalUrl(removalToken) };
   }
 
   async list(q: ListSupportersQuery) {

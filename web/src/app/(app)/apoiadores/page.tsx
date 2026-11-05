@@ -11,6 +11,7 @@ export default function ApoiadoresPage() {
   const [q, setQ] = useState('');
   const [res, setRes] = useState<Page>();
   const [error, setError] = useState('');
+  const [note, setNote] = useState('');
 
   useEffect(() => {
     const p = new URLSearchParams({ page: String(page), pageSize: '20' });
@@ -27,6 +28,16 @@ export default function ApoiadoresPage() {
     }
   }
 
+  async function copyLink(id: string) {
+    try {
+      const { url } = await api<{ url: string }>(`/supporters/${id}/removal-link`);
+      await navigator.clipboard.writeText(url);
+      setNote('Link de descadastro copiado.');
+    } catch (e) {
+      setError(e instanceof Error ? e.message : 'Erro');
+    }
+  }
+
   const pages = res ? Math.max(1, Math.ceil(res.meta.total / res.meta.pageSize)) : 1;
   return (
     <div className="space-y-3">
@@ -36,13 +47,17 @@ export default function ApoiadoresPage() {
       </div>
       <input aria-label="Buscar" placeholder="Buscar por nome" value={q} onChange={(e) => { setQ(e.target.value); setPage(1); }} className="w-64 rounded border px-3 py-1.5 text-sm" />
       {error && <p role="alert" className="text-sm text-danger">{error}</p>}
+      {note && <p role="status" className="text-sm text-ok">{note}</p>}
       <ul className="divide-y rounded border bg-card">
         {res?.data.map((s) => (
           <li key={s.id} className="flex items-center justify-between px-4 py-2 text-sm">
             <span>{s.name}</span>
-            {s.hasActiveConsent
-              ? <button className="text-brand underline" onClick={() => whatsapp(s.id)}>WhatsApp</button>
-              : <span className="text-xs text-mut">sem consentimento</span>}
+            <span className="flex items-center gap-3">
+              <button className="text-xs text-mut underline" onClick={() => copyLink(s.id)}>Link de descadastro</button>
+              {s.hasActiveConsent
+                ? <button className="text-brand underline" onClick={() => whatsapp(s.id)}>WhatsApp</button>
+                : <span className="text-xs text-mut">sem consentimento</span>}
+            </span>
           </li>
         ))}
         {res && !res.data.length && <li className="px-4 py-3 text-mut">Nenhum apoiador.</li>}

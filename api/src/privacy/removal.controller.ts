@@ -1,9 +1,12 @@
 import { Controller, Get, HttpCode, NotFoundException, Param, ParseUUIDPipe, Post } from '@nestjs/common';
 import { ClsService } from 'nestjs-cls';
 import { Public } from '../common/public.decorator';
+import { RateLimit } from '../common/rate-limit';
 import { Roles } from '../common/roles.decorator';
 import { PrismaService } from '../tenancy/prisma.service';
 import { ScopeService } from '../tenancy/scope.service';
+import { LogAccess } from '../common/access-log.interceptor';
+import { removalUrl } from './removal-url';
 import { RemovalService } from './removal.service';
 
 @Controller()
@@ -13,11 +16,19 @@ export class RemovalController {
     private readonly scope: ScopeService, private readonly cls: ClsService,
   ) {}
 
-  @Public() @Get('public/remove-data/:token')
+  @Public() @RateLimit({ name: 'remove-info', max: 30, windowMs: 60_000 }) @Get('public/remove-data/:token')
   info(@Param('token', ParseUUIDPipe) token: string) { return this.removal.tokenInfo(token); }
 
-  @Public() @Post('public/remove-data/:token') @HttpCode(200)
+  @Public() @RateLimit({ name: 'remove', max: 10, windowMs: 60_000 }) @Post('public/remove-data/:token') @HttpCode(200)
   byToken(@Param('token', ParseUUIDPipe) token: string) { return this.removal.removeByToken(token); }
+
+  /** Link público de descadastro para entregar ao titular (RF-22). */
+  @Roles('CANDIDATO', 'COORD_GERAL', 'COORD_REGIAO', 'LIDERANCA') @Get('supporters/:id/removal-link') @LogAccess('supporter', 'REMOVAL_LINK')
+  async link(@Param('id', ParseUUIDPipe) id: string) {
+    const s = await this.prisma.tenant.supporter.findFirst({ where: { AND: [await this.scope.supporterWhere(), { id }, { anonymizedAt: null }] }, select: { removalToken: true } });
+    if (!s) throw new NotFoundException();
+    return { url: removalUrl(s.removalToken) };
+  }
 
   /** Descadastro pela equipe, em 1 clique, dentro do escopo do papel. */
   @Roles('CANDIDATO', 'COORD_GERAL', 'COORD_REGIAO', 'LIDERANCA') @Post('supporters/:id/revoke') @HttpCode(200)

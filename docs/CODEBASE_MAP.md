@@ -145,8 +145,8 @@ sequenceDiagram
 1. Env lido no import (`JwtModule`, `BullModule`): `main.ts` não carrega dotenv; exportar variáveis ou `set -a; . ../.env`.
 2. `@baseforte/shared` usa `dist`: rodar `npm run build:shared`.
 3. Raw SQL ignora a extensão de tenant: `GeoRepository`, `subtreeIds`, `MapService`, `RankingService`, `RegionsService`, `CloseCampaignService`. Manter `MapService.supporterSql()` em sincronia com `ScopeService`.
-4. Sem rate limit em login e descadastro público; geocode sem retry.
-5. `removalToken` não é devolvido em nenhum endpoint: falta definir como o apoiador recebe o link.
+4. Rate limit em memória (`common/rate-limit.ts`, `RATE_LIMIT=off` nos testes; `trust proxy` = 1); geocode sem retry.
+5. Link de descadastro: `POST /supporters` devolve `removalUrl` e `GET /supporters/:id/removal-link` o reemite (URL base em `WEB_URL`).
 6. `statusWhere` aproxima `computeStatus` (cortes 15/46 dias).
 7. Um slot de refresh por usuário: login em outro dispositivo invalida o anterior.
 8. `dotenv` não declarado em `package.json`; ESLint sem config (T35); sem Dockerfiles de api/web.

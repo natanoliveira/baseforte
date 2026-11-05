@@ -21,6 +21,8 @@ export default function NovoApoiadorPage() {
   const [pos, setPos] = useState<{ lat: number; lng: number }>();
   const [error, setError] = useState('');
   const [busy, setBusy] = useState(false);
+  const [link, setLink] = useState('');
+  const [copied, setCopied] = useState(false);
   const marker = useRef<maplibregl.Marker>();
 
   useEffect(() => {
@@ -45,7 +47,7 @@ export default function NovoApoiadorPage() {
     setBusy(true);
     setError('');
     try {
-      await api('/supporters', {
+      const created = await api<{ removalUrl: string }>('/supporters', {
         method: 'POST',
         body: JSON.stringify({
           name: text('name'), phone: text('phone'), cpf: text('cpf'), address: text('address'),
@@ -55,7 +57,7 @@ export default function NovoApoiadorPage() {
           consent: { channel, purpose: 'Organização e contato da campanha', textVersion: CONSENT_VERSION, textAccepted: CONSENT_TEXT },
         }),
       });
-      router.push('/apoiadores');
+      setLink(created.removalUrl);
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Erro inesperado');
     } finally {
@@ -64,6 +66,17 @@ export default function NovoApoiadorPage() {
   }
 
   const input = 'mt-1 w-full rounded border px-3 py-2';
+  if (link) return (
+    <div className="mx-auto max-w-xl space-y-4">
+      <h1 className="text-xl">Apoiador cadastrado</h1>
+      <p className="text-sm">Entregue este link ao apoiador. Com ele, o titular pode remover os próprios dados a qualquer momento, sem login.</p>
+      <input readOnly value={link} aria-label="Link de descadastro" className="w-full rounded border bg-soft px-3 py-2 text-sm" onFocus={(e) => e.currentTarget.select()} />
+      <div className="flex gap-3">
+        <Button type="button" onClick={() => navigator.clipboard.writeText(link).then(() => setCopied(true))}>{copied ? 'Copiado' : 'Copiar link'}</Button>
+        <button type="button" className="text-brand underline" onClick={() => router.push('/apoiadores')}>Voltar à lista</button>
+      </div>
+    </div>
+  );
   return (
     <form onSubmit={onSubmit} className="mx-auto grid max-w-4xl gap-6 md:grid-cols-2">
       <div className="space-y-3">
