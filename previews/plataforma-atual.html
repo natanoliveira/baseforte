@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>BaseForte — Preview do design atual (web/)</title>
+<style>
+/* Réplica fiel do que está hoje em web/: Tailwind padrão, slate-50, brand #14805a, navbar branca no topo */
+:root{--brand:#14805a;--brand-dark:#0b4d37;--slate50:#f8fafc;--slate200:#e2e8f0;--slate500:#64748b;--slate900:#0f172a}
+*{box-sizing:border-box;margin:0}
+body{font:16px/1.5 ui-sans-serif,system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;background:var(--slate50);color:var(--slate900);min-height:100vh;display:flex;flex-direction:column}
+.note{background:#fef3c7;color:#78350f;text-align:center;font-size:12px;padding:6px 16px}
+header{display:flex;align-items:center;justify-content:space-between;background:#fff;border-bottom:1px solid var(--slate200);padding:12px 24px}
+nav{display:flex;align-items:center;gap:16px;font-size:14px}
+nav strong{color:var(--brand-dark)}
+nav a{color:inherit;text-decoration:none}nav a:hover{text-decoration:underline}
+.user{display:flex;gap:12px;font-size:14px;align-items:center}.user a{color:var(--brand);text-decoration:underline}
+main{flex:1;padding:24px}
+h1{font-size:20px;font-weight:600;margin-bottom:12px}
+h2{font-size:20px;font-weight:600;margin-bottom:12px}
+.view{display:none}.view.on{display:block}
+.btn{background:var(--brand);color:#fff;border:0;border-radius:6px;padding:8px 16px;font-size:14px;font-weight:600;cursor:pointer;text-decoration:none;display:inline-block}
+.btn:hover{background:var(--brand-dark)}
+.login{display:grid;place-items:center;min-height:100%;padding:16px}
+.login form{background:#fff;width:100%;max-width:384px;border-radius:12px;padding:32px;box-shadow:0 1px 3px #0002,0 1px 2px #0001;display:grid;gap:16px}
+.login h1{font-size:24px;font-weight:700;color:var(--brand-dark);margin:0}
+label{font-size:14px;display:block}
+input,select{margin-top:4px;width:100%;border:1px solid #d1d5db;border-radius:6px;padding:8px 12px;font:inherit}
+.bar{display:flex;flex-wrap:wrap;align-items:flex-end;gap:12px;background:#fff;border:1px solid var(--slate200);border-bottom:0;padding:12px;font-size:14px;border-radius:8px 8px 0 0}
+.bar select,.bar input{width:auto;margin:0;padding:4px 8px;font-size:14px}.bar input{width:96px}
+.bar .r{margin-left:auto}
+.toggles{display:flex;flex-wrap:wrap;gap:16px;background:var(--slate50);border:1px solid var(--slate200);border-bottom:0;padding:6px 12px;font-size:12px}
+.toggles label{display:flex;align-items:center;gap:4px;font-size:12px}.toggles input{width:auto;margin:0}
+.map{position:relative;height:440px;border:1px solid var(--slate200);border-radius:0 0 8px 8px;background:#eef2f0;overflow:hidden}
+.map svg{width:100%;height:100%;display:block}
+aside{position:absolute;right:0;top:0;bottom:0;width:320px;background:#fff;border-left:1px solid var(--slate200);padding:16px;font-size:14px;box-shadow:-4px 0 12px #0002}
+aside h3{font-size:18px;font-weight:600}
+.warn{margin-top:8px;border-radius:4px;padding:8px;background:#fef2f2;color:#b91c1c}
+.grid{display:grid;grid-template-columns:2fr 1fr;gap:24px}
+@media(max-width:900px){.grid{grid-template-columns:1fr}aside{width:100%}}
+.coord{background:#fff;border:1px solid var(--slate200);border-radius:8px;padding:12px;margin-bottom:16px}
+.coord h3{color:var(--brand-dark);font-weight:600;margin-bottom:8px}
+.card{display:inline-flex;align-items:center;gap:8px;background:#fff;border:1px solid var(--slate200);border-radius:4px;padding:4px 8px;font-size:14px}
+.card i{width:8px;height:8px;border-radius:50%;background:#22c55e}.card small{color:var(--slate500);font-size:12px}.card b{color:#94a3b8;font-weight:400}
+ul.t{list-style:none;padding:0;display:grid;gap:4px}ul.t ul{list-style:none;margin:4px 0 0 24px;padding:0 0 0 12px;border-left:1px solid var(--slate200);display:grid;gap:4px}
+ol.rk{list-style:none;padding:0;display:grid;gap:4px;font-size:14px}ol.rk li{display:flex;justify-content:space-between;background:#fff;border:1px solid var(--slate200);border-radius:4px;padding:4px 12px}ol.rk span{color:var(--slate500)}
+.row{display:flex;justify-content:space-between;padding:8px 16px;font-size:14px;border-bottom:1px solid var(--slate200)}.row:last-child{border:0}
+.list{background:#fff;border:1px solid var(--slate200);border-radius:4px;margin:12px 0}
+.row a{color:var(--brand);text-decoration:underline}.row em{font-size:12px;color:#94a3b8;font-style:normal}
+.tabs{position:fixed;bottom:12px;left:50%;transform:translateX(-50%);background:#0f172ae6;color:#fff;border-radius:99px;padding:6px 8px;display:flex;gap:4px;font-size:13px;z-index:9}
+.tabs a{color:#fff;text-decoration:none;padding:4px 12px;border-radius:99px}.tabs a.on{background:var(--brand)}
+</style>
+</head>
+<body>
+<div id="shell">
+  <div class="note" role="note">O BaseForte não substitui orientação jurídica eleitoral.</div>
+  <header>
+    <nav><strong>BaseForte</strong><a href="#painel">Mapa</a><a href="#liderancas">Lideranças</a><a href="#apoiadores">Apoiadores</a><a href="#privacidade">Privacidade</a></nav>
+    <div class="user"><span>Candidato(a) Exemplo · CANDIDATO</span><a href="#login">Sair</a></div>
+  </header>
+  <main>
+    <section class="view on" id="v-painel">
+      <h1>Painel</h1>
+      <p style="color:var(--slate500);font-size:14px;margin-bottom:16px">Hoje a página inicial é só este título. O conteúdo está em Mapa.</p>
+      <div class="bar"><select><option>Todos os coordenadores</option></select><select><option>Todos os bairros</option></select><select><option>Qualquer status</option></select><input placeholder="Meta mín."><input placeholder="Meta máx."><a href="#" style="color:var(--brand);text-decoration:underline">Limpar</a><button class="btn r" style="padding:4px 12px">Exportar PNG</button></div>
+      <div class="toggles"><label><input type="checkbox" checked>Lideranças</label><label><input type="checkbox" checked>Calor de apoiadores</label><label><input type="checkbox" checked>% da meta por bairro</label><label><input type="checkbox" checked>Bairros vazios</label><label><input type="checkbox">Locais de votação</label></div>
+      <div class="map">
+        <svg viewBox="0 0 740 440" preserveAspectRatio="xMidYMid meet"><g stroke="#475569" stroke-width="1" fill-opacity=".55"><path d="M20 40L190 20 230 150 70 190Z" fill="#16a34a"/><path d="M190 20L370 50 350 190 230 150Z" fill="#84cc16"/><path d="M370 50L560 30 590 180 350 190Z" fill="#f59e0b"/><path d="M70 190L230 150 350 190 330 380 90 360Z" fill="#22c55e"/><path d="M350 190L590 180 570 390 330 380Z" fill="#dc2626"/><path d="M590 180L720 200 700 380 570 390Z" fill="#eab308"/></g>
+        <g stroke="#fff" stroke-width="2"><circle cx="120" cy="100" r="9" fill="#16a34a"/><circle cx="290" cy="90" r="14" fill="#0f766e"/><text x="290" y="94" fill="#fff" font-size="11" text-anchor="middle" stroke="none">5</text><circle cx="470" cy="110" r="8" fill="#f59e0b"/><circle cx="200" cy="270" r="14" fill="#16a34a"/><circle cx="450" cy="290" r="16" fill="#16a34a"/><circle cx="640" cy="290" r="7" fill="#9ca3af"/></g></svg>
+        <aside aria-label="Painel do bairro"><div style="display:flex;justify-content:space-between"><h3>Centro</h3><span>✕</span></div>
+          <p style="margin-top:4px">Apoiadores: <b>63</b> / meta 50 (126%)</p><p class="warn">Abaixo da meta.</p>
+          <h4 style="margin-top:16px;font-weight:500">Lideranças</h4><p style="margin-top:4px">Rafael Q. Nunes · ativo · 63/50</p>
+          <h4 style="margin-top:16px;font-weight:500">Pedidos</h4><p style="color:var(--slate500)">Disponível na fase 2.</p>
+          <a class="btn" style="margin-top:16px">Baixar relatório PDF</a></aside>
+      </div>
+    </section>
+
+    <section class="view" id="v-liderancas">
+      <div class="grid"><div><h1>Pirâmide de lideranças</h1><p style="font-size:14px;color:#475569;margin-bottom:12px">Arraste uma liderança para um coordenador ou outra liderança para reatribuir.</p>
+        <div class="coord"><h3>Coord. Norte</h3><ul class="t"><li><span class="card"><b>⠿</b><i></i>Rafael Q. Nunes <small>63/50</small></span><ul><li><span class="card"><b>⠿</b><i style="background:#f59e0b"></i>Marta Lima <small>26/50</small></span></li></ul></li><li><span class="card"><b>⠿</b><i></i>Ana O. Holanda <small>32/41</small></span></li></ul></div>
+        <div class="coord"><h3>Coord. Sul</h3><ul class="t"><li><span class="card"><b>⠿</b><i></i>Nilton B. Gomes <small>66/53</small></span></li><li><span class="card"><b>⠿</b><i style="background:#9ca3af"></i>Davi Sousa <small>10/48</small></span></li></ul></div></div>
+        <div><h2>Ranking</h2><ol class="rk"><li><p>1. Rafael Q. Nunes</p><span>126% da meta</span></li><li><p>2. Nilton B. Gomes</p><span>125% da meta</span></li><li><p>3. Ana O. Holanda</p><span>78% da meta</span></li></ol></div></div>
+    </section>
+
+    <section class="view" id="v-apoiadores">
+      <div style="display:flex;justify-content:space-between;align-items:center"><h1>Apoiadores</h1><a class="btn">Novo apoiador</a></div>
+      <input placeholder="Buscar por nome" style="width:256px;font-size:14px">
+      <div class="list"><div class="row"><span>Cláudia M.</span><a href="#">WhatsApp</a></div><div class="row"><span>Luís P.</span><a href="#">WhatsApp</a></div><div class="row"><span>Cadastro removido</span><em>sem consentimento</em></div></div>
+      <p style="font-size:14px">← Anterior &nbsp; 1 / 75 &nbsp; Próxima →</p>
+    </section>
+
+    <section class="view" id="v-privacidade">
+      <div style="display:flex;justify-content:space-between"><h1>Privacidade e LGPD</h1><nav><a href="#" style="color:var(--brand);text-decoration:underline">Auditoria</a><a href="#" style="color:var(--brand);text-decoration:underline">Encerrar campanha</a></nav></div>
+      <div style="max-width:576px;display:grid;gap:12px"><h2 style="font-size:16px">Encarregado de dados (DPO)</h2>
+        <label>Nome<input value="Encarregado(a) Exemplo"></label><label>E-mail<input value="dpo@exemplo.test"></label><button class="btn" style="width:fit-content">Salvar</button></div>
+    </section>
+  </main>
+</div>
+
+<div class="login view" id="v-login" style="min-height:100vh"><form onsubmit="event.preventDefault();location.hash='#painel'"><h1>BaseForte</h1><label>E-mail<input type="email" value="candidato@exemplo.test"></label><label>Senha<input type="password" value="demo1234"></label><button class="btn" style="width:100%">Entrar</button></form></div>
+
+<div class="tabs"><a href="#painel">Mapa</a><a href="#liderancas">Lideranças</a><a href="#apoiadores">Apoiadores</a><a href="#privacidade">Privacidade</a><a href="#login">Login</a></div>
+<script>
+function route(){const id=(location.hash||'#painel').slice(1);const login=id==='login';
+ document.getElementById('shell').style.display=login?'none':'flex';document.getElementById('shell').style.flexDirection='column';
+ document.getElementById('v-login').classList.toggle('on',login);
+ document.querySelectorAll('#shell .view').forEach(v=>v.classList.toggle('on',v.id==='v-'+(login?'painel':id)));
+ document.querySelectorAll('.tabs a').forEach(a=>a.classList.toggle('on',a.getAttribute('href')==='#'+id));}
+addEventListener('hashchange',route);route();
+</script>
+</body>
+</html>

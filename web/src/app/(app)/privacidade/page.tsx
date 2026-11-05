@@ -38,7 +38,7 @@ export default function PrivacidadePage() {
     }
   }
 
-  const input = 'mt-1 w-full rounded border px-3 py-2 disabled:bg-slate-100';
+  const input = 'mt-1 w-full rounded border px-3 py-2 disabled:bg-soft';
   return (
     <div className="space-y-8">
       <div className="flex items-center justify-between">
@@ -71,12 +71,12 @@ export default function PrivacidadePage() {
           </div>
         </div>
         {ropa && (<>
-          <p className="mb-2 text-sm text-slate-600">
+          <p className="mb-2 text-sm text-mut">
             {ropa.stats.supporters} apoiadores · {ropa.stats.withActiveConsent} com consentimento ativo · {ropa.stats.removals} remoções
           </p>
-          <div className="overflow-x-auto rounded border bg-white">
+          <div className="overflow-x-auto rounded border bg-card">
             <table className="w-full text-left text-sm">
-              <thead className="bg-slate-50"><tr>{['Operação', 'Finalidade', 'Base legal', 'Dados', 'Retenção'].map((h) => <th key={h} className="px-3 py-2">{h}</th>)}</tr></thead>
+              <thead className="bg-soft"><tr>{['Operação', 'Finalidade', 'Base legal', 'Dados', 'Retenção'].map((h) => <th key={h} className="px-3 py-2">{h}</th>)}</tr></thead>
               <tbody>{ropa.rows.map((r) => (
                 <tr key={r.operacao} className="border-t align-top">
                   <td className="px-3 py-2 font-medium">{r.operacao}</td><td className="px-3 py-2">{r.finalidade}</td>

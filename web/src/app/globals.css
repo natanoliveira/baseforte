@@ -1,3 +1,18 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+:root {
+  --paper: 243 238 226; --card: 251 248 240; --ink: 18 36 31; --mut: 91 107 101; --line: 214 205 184;
+  --brand: 15 76 69; --brand-ink: 243 238 226; --accent: 217 154 30; --ok: 47 125 91; --cold: 201 138 27;
+  --off: 124 135 130; --danger: 178 69 47; --soft: 233 226 206; --sb: 15 76 69;
+}
+[data-theme='dark'] {
+  --paper: 12 24 21; --card: 22 42 37; --ink: 239 233 218; --mut: 159 176 169; --line: 41 64 57;
+  --brand: 88 181 159; --brand-ink: 7 33 28; --accent: 232 174 58; --ok: 92 191 146; --cold: 224 166 58;
+  --off: 142 153 148; --danger: 224 113 90; --soft: 29 51 45; --sb: 10 35 32;
+}
+@layer base {
+  body { @apply bg-paper font-sans text-ink antialiased; }
+  h1, h2 { @apply font-display; }
+}

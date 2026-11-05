@@ -45,8 +45,8 @@ export default function EncerrarPage() {
           </label>
         ))}
       </fieldset>
-      <div className="space-y-3 rounded border border-red-300 bg-red-50 p-4 text-sm">
-        <p className="font-medium text-red-800">Ação irreversível: a campanha passa a ser somente leitura.</p>
+      <div className="space-y-3 rounded border border-danger/40 bg-danger/10 p-4 text-sm">
+        <p className="font-medium text-danger">Ação irreversível: a campanha passa a ser somente leitura.</p>
         <label className="flex items-start gap-2">
           <input type="checkbox" checked={confirm1} onChange={(e) => setConfirm1(e.target.checked)} disabled={closed} className="mt-1" />
           Entendo que esta ação não pode ser desfeita.
@@ -54,7 +54,7 @@ export default function EncerrarPage() {
         <label className="block">Digite o nome da campanha{campaign && <> (<b>{campaign}</b>)</>} para confirmar
           <input value={name} onChange={(e) => setName(e.target.value)} disabled={closed} className="mt-1 w-full rounded border px-3 py-2" />
         </label>
-        <button onClick={close} disabled={closed || !confirm1 || name.trim() !== campaign} className="rounded bg-red-600 px-4 py-2 font-semibold text-white disabled:opacity-40">
+        <button onClick={close} disabled={closed || !confirm1 || name.trim() !== campaign} className="rounded bg-danger px-4 py-2 font-semibold text-brand-ink disabled:opacity-40">
           Encerrar campanha
         </button>
       </div>

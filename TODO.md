@@ -2,6 +2,8 @@
 
 > **PAUSADO até nova ordem do usuário (2026-11-05):** não executar T33–T37, Dockerfiles, `make tiles`, F2 e F3. Só retomar quando o usuário pedir. Também pendente: validação visual de T27–T32 (Chrome desconectado) e code review do diff.
 
+Design aplicado (sidebar recuável + tokens + painel + login) em 2026-11-05; ver `previews/plataforma-final.html`. Painel logado e tema escuro ainda sem validação visual.
+
 Fonte: `docs/specs/baseforte-mvp/tasks.md` (marcar `[x]` lá ao concluir). Estado: **T01–T26 prontos**; T27–T32 feitos no código, sem validação visual.
 
 ## Antes de continuar

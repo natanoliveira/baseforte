@@ -26,12 +26,12 @@ export default function RemoverDadosPage() {
   const removed = done || info?.alreadyRemoved;
   return (
     <main className="grid min-h-screen place-items-center p-4">
-      <div className="w-full max-w-md space-y-4 rounded-xl bg-white p-8 shadow">
+      <div className="w-full max-w-md space-y-4 rounded-xl bg-card p-8 shadow">
         <h1 className="text-xl font-bold text-brand-dark">Remover meus dados</h1>
-        {error && <p role="alert" className="text-red-600">{error}</p>}
+        {error && <p role="alert" className="text-danger">{error}</p>}
         {info && !removed && (<>
           <p className="text-sm">Você pode pedir a remoção dos seus dados pessoais da campanha <b>{info.campaignName}</b>. Seu cadastro será anonimizado e você sairá de todas as listas de contato.</p>
-          <button onClick={remove} disabled={busy} className="w-full rounded-md bg-red-600 px-4 py-2 font-semibold text-white disabled:opacity-60">
+          <button onClick={remove} disabled={busy} className="w-full rounded-md bg-danger px-4 py-2 font-semibold text-brand-ink disabled:opacity-60">
             {busy ? 'Removendo…' : 'Remover meus dados'}
           </button>
         </>)}

@@ -83,7 +83,7 @@ export function MapExplorer() {
 
   return (
     <div className="flex h-full flex-col">
-      <div className="flex flex-wrap items-end gap-3 border-b bg-white p-3 text-sm">
+      <div className="flex flex-wrap items-end gap-3 border-b bg-card p-3 text-sm">
         <select aria-label="Coordenador" className={field} value={filters.coordinatorId} onChange={set('coordinatorId')}>
           <option value="">Todos os coordenadores</option>
           {coordinators.map((c) => <option key={c.id} value={c.id}>{c.name}</option>)}
@@ -99,9 +99,9 @@ export function MapExplorer() {
         <input aria-label="Meta mínima" type="number" min={0} placeholder="Meta mín." className={`${field} w-24`} value={filters.goalMin} onChange={set('goalMin')} />
         <input aria-label="Meta máxima" type="number" min={0} placeholder="Meta máx." className={`${field} w-24`} value={filters.goalMax} onChange={set('goalMax')} />
         <button className="text-brand underline" onClick={() => setFilters(NO_FILTERS)}>Limpar</button>
-        <button className="ml-auto rounded bg-brand px-3 py-1 text-white" onClick={exportPng}>Exportar PNG</button>
+        <button className="ml-auto rounded bg-brand px-3 py-1 text-brand-ink" onClick={exportPng}>Exportar PNG</button>
       </div>
-      <div className="flex flex-wrap gap-4 border-b bg-slate-50 px-3 py-1.5 text-xs">
+      <div className="flex flex-wrap gap-4 border-b bg-soft px-3 py-1.5 text-xs">
         {(Object.keys(GROUPS) as GroupKey[]).map((g) => (
           <label key={g} className="flex items-center gap-1">
             <input type="checkbox" checked={visible[g]} onChange={(e) => setVisible((v) => ({ ...v, [g]: e.target.checked }))} />
@@ -112,26 +112,26 @@ export function MapExplorer() {
       <div className="relative min-h-0 flex-1">
         <MapView onReady={onReady} />
         {panel && (
-          <aside className="absolute right-0 top-0 h-full w-80 overflow-y-auto border-l bg-white p-4 text-sm shadow-lg" aria-label="Painel do bairro">
+          <aside className="absolute right-0 top-0 h-full w-80 overflow-y-auto border-l bg-card p-4 text-sm shadow-lg" aria-label="Painel do bairro">
             <div className="flex items-start justify-between">
               <h2 className="text-lg font-semibold">{panel.neighborhood.name}</h2>
               <button aria-label="Fechar" onClick={() => setPanel(null)}>✕</button>
             </div>
             <p className="mt-1">Apoiadores: <b>{panel.supporters}</b> / meta {panel.goal} ({panel.pct ?? '—'}%)</p>
-            {panel.gaps.noLeaders && <p className="mt-2 rounded bg-red-50 p-2 text-red-700">Bairro sem nenhuma liderança.</p>}
-            {panel.gaps.belowGoal && <p className="mt-2 rounded bg-amber-50 p-2 text-amber-800">Abaixo da meta.</p>}
+            {panel.gaps.noLeaders && <p className="mt-2 rounded bg-danger/10 p-2 text-danger">Bairro sem nenhuma liderança.</p>}
+            {panel.gaps.belowGoal && <p className="mt-2 rounded bg-accent/15 p-2 text-ink">Abaixo da meta.</p>}
             <h3 className="mt-4 font-medium">Lideranças</h3>
             <ul className="mt-1 space-y-1">
               {panel.leaders.map((l) => <li key={l.id}>{l.name} · {l.status.toLowerCase()} · {l.supporters}/{l.goal}</li>)}
-              {!panel.leaders.length && <li className="text-slate-500">Nenhuma.</li>}
+              {!panel.leaders.length && <li className="text-mut">Nenhuma.</li>}
             </ul>
             <h3 className="mt-4 font-medium">Pedidos</h3>
-            <p className="text-slate-500">Disponível na fase 2.</p>
+            <p className="text-mut">Disponível na fase 2.</p>
             {!!panel.votingPlaces.length && (<>
               <h3 className="mt-4 font-medium">Locais de votação</h3>
               <ul className="mt-1 list-disc pl-5">{panel.votingPlaces.map((v) => <li key={v.id}>{v.name}</li>)}</ul>
             </>)}
-            <a className="mt-4 inline-block rounded bg-brand px-3 py-1 text-white" href={`/api/v1/neighborhoods/${panel.neighborhood.id}/report.pdf`} download>
+            <a className="mt-4 inline-block rounded bg-brand px-3 py-1 text-brand-ink" href={`/api/v1/neighborhoods/${panel.neighborhood.id}/report.pdf`} download>
               Baixar relatório PDF
             </a>
           </aside>

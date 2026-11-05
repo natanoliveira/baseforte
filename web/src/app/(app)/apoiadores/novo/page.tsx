@@ -87,13 +87,13 @@ export default function NovoApoiadorPage() {
           </label>
         )}
         <ConsentForm checked={accepted} onChange={setAccepted} channel={channel} onChannel={setChannel} />
-        {error && <p role="alert" className="text-sm text-red-600">{error}</p>}
+        {error && <p role="alert" className="text-sm text-danger">{error}</p>}
         <Button type="submit" disabled={busy || !accepted}>{busy ? 'Salvando…' : 'Salvar'}</Button>
       </div>
       <div className="space-y-2">
-        <p className="text-sm">Clique no mapa para posicionar o apoiador {pos && <span className="text-slate-500">(posição marcada)</span>}</p>
+        <p className="text-sm">Clique no mapa para posicionar o apoiador {pos && <span className="text-mut">(posição marcada)</span>}</p>
         <div className="h-96 overflow-hidden rounded border"><MapView onReady={onReady} /></div>
-        <p className="text-xs text-slate-500">A posição exata fica criptografada; o mapa público mostra só um ponto deslocado (~200 m).</p>
+        <p className="text-xs text-mut">A posição exata fica criptografada; o mapa público mostra só um ponto deslocado (~200 m).</p>
       </div>
     </form>
   );

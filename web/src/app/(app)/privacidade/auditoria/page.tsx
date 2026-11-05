@@ -31,21 +31,21 @@ export default function AuditoriaPage() {
       <h1 className="text-xl font-semibold">Auditoria</h1>
       <div className="flex gap-2 text-sm">
         {(['consents', 'logs'] as const).map((t) => (
-          <button key={t} onClick={() => { setTab(t); setPage(1); }} className={`rounded px-3 py-1 ${tab === t ? 'bg-brand text-white' : 'border bg-white'}`}>
+          <button key={t} onClick={() => { setTab(t); setPage(1); }} className={`rounded px-3 py-1 ${tab === t ? 'bg-brand text-brand-ink' : 'border bg-card'}`}>
             {t === 'consents' ? 'Consentimentos' : 'Logs de acesso'}
           </button>
         ))}
       </div>
-      {error && <p role="alert" className="text-sm text-red-600">{error}</p>}
-      <div className="overflow-x-auto rounded border bg-white">
+      {error && <p role="alert" className="text-sm text-danger">{error}</p>}
+      <div className="overflow-x-auto rounded border bg-card">
         <table className="w-full text-left text-sm">
           {tab === 'consents' ? (<>
-            <thead className="bg-slate-50"><tr><th className={th}>Apoiador</th><th className={th}>Data</th><th className={th}>Canal</th><th className={th}>Finalidade</th><th className={th}>Situação</th></tr></thead>
+            <thead className="bg-soft"><tr><th className={th}>Apoiador</th><th className={th}>Data</th><th className={th}>Canal</th><th className={th}>Finalidade</th><th className={th}>Situação</th></tr></thead>
             <tbody>{consents?.data.map((c) => (
               <tr key={c.id} className="border-t"><td className={th}>{c.supporterName}</td><td className={th}>{fmt(c.grantedAt)}</td><td className={th}>{c.channel}</td><td className={th}>{c.purpose}</td><td className={th}>{c.revokedAt ? `revogado em ${fmt(c.revokedAt)}` : 'ativo'}</td></tr>
             ))}</tbody>
           </>) : (<>
-            <thead className="bg-slate-50"><tr><th className={th}>Quando</th><th className={th}>Papel</th><th className={th}>Recurso</th><th className={th}>Ação</th><th className={th}>Resultado</th></tr></thead>
+            <thead className="bg-soft"><tr><th className={th}>Quando</th><th className={th}>Papel</th><th className={th}>Recurso</th><th className={th}>Ação</th><th className={th}>Resultado</th></tr></thead>
             <tbody>{logs?.data.map((l) => (
               <tr key={l.id} className="border-t"><td className={th}>{fmt(l.at)}</td><td className={th}>{l.role ?? '—'}</td><td className={th}>{l.resource}</td><td className={th}>{l.action}</td><td className={th}>{l.outcome}</td></tr>
             ))}</tbody>

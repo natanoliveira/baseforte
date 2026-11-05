@@ -9,7 +9,7 @@ export function ConsentForm({ checked, onChange, channel, onChannel }: {
   checked: boolean; onChange: (v: boolean) => void; channel: string; onChannel: (v: string) => void;
 }) {
   return (
-    <fieldset className="space-y-2 rounded border bg-amber-50 p-3 text-sm">
+    <fieldset className="space-y-2 rounded border bg-accent/15 p-3 text-sm">
       <legend className="px-1 font-medium">Consentimento (LGPD)</legend>
       <p>{CONSENT_TEXT}</p>
       <label className="block">Canal da coleta

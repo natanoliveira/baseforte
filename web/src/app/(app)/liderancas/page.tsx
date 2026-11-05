@@ -19,16 +19,16 @@ export default function LiderancasPage() {
     <div className="grid gap-6 lg:grid-cols-[2fr_1fr]">
       <section>
         <h1 className="mb-3 text-xl font-semibold">Pirâmide de lideranças</h1>
-        <p className="mb-3 text-sm text-slate-600">Arraste uma liderança para um coordenador ou outra liderança para reatribuir.</p>
+        <p className="mb-3 text-sm text-mut">Arraste uma liderança para um coordenador ou outra liderança para reatribuir.</p>
         {tree ? <OrgChart coordinators={tree.coordinators} leaders={tree.leaders} onMoved={load} /> : <p>Carregando…</p>}
       </section>
       <section>
         <h2 className="mb-3 text-xl font-semibold">Ranking</h2>
         <ol className="space-y-1 text-sm">
           {ranking.slice(0, 20).map((r) => (
-            <li key={r.id} className="flex justify-between rounded border bg-white px-3 py-1">
+            <li key={r.id} className="flex justify-between rounded border bg-card px-3 py-1">
               <span>{r.rank}. {r.name}</span>
-              <span className="text-slate-500">{r.goalPct ?? '—'}% da meta</span>
+              <span className="text-mut">{r.goalPct ?? '—'}% da meta</span>
             </li>
           ))}
         </ol>

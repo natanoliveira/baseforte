@@ -13,3 +13,6 @@ Gestão de lideranças e campanha, apartidário, multi-tenant. Specs em `docs/sp
 
 ## Visão geral do código
 Mapa completo em [docs/CODEBASE_MAP.md](docs/CODEBASE_MAP.md). Stack: NestJS 10 + Prisma 5 + Postgres/PostGIS + Redis/BullMQ (`api/`), Next 14 + Tailwind (`web/`, o browser chama `/api/v1` e o Next reescreve para a API), `packages/shared` (enums, limites de plano).
+
+## Design do web (`web/`)
+Tokens em `web/src/app/globals.css` (variáveis RGB, tema claro/escuro via `data-theme`) mapeados no `tailwind.config.ts` (`bg-card`, `text-mut`, `bg-brand`, `font-display`). Layout autenticado: `components/shell/Shell.tsx` (sidebar recuável, topbar, banner jurídico). Referência visual: `previews/plataforma-final.html`. Kanban de Demandas só entra com a F2.

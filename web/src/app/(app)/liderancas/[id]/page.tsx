@@ -14,7 +14,7 @@ export default function LiderancaPage() {
     api<Leader>(`/leaders/${id}`).then(setL).catch((e) => setErr(e.message));
   }, [id]);
 
-  if (err) return <p role="alert" className="text-red-600">{err}</p>;
+  if (err) return <p role="alert" className="text-danger">{err}</p>;
   if (!l) return <p>Carregando…</p>;
   return (
     <div className="space-y-2">

@@ -9,7 +9,7 @@ export type TreeLeader = {
   id: string; name: string; parentId: string | null; coordinatorId: string | null;
   goal: number; supporterCount: number; status: string;
 };
-const DOT: Record<string, string> = { ATIVO: 'bg-green-500', FRIO: 'bg-amber-500', INATIVO: 'bg-gray-400' };
+const DOT: Record<string, string> = { ATIVO: 'bg-ok', FRIO: 'bg-accent/150', INATIVO: 'bg-off' };
 
 function Drop({ id, className, children }: { id: string; className?: string; children: React.ReactNode }) {
   const { setNodeRef, isOver } = useDroppable({ id });
@@ -22,12 +22,12 @@ function Card({ l }: { l: TreeLeader }) {
     <div
       ref={setNodeRef}
       style={{ transform: transform ? `translate(${transform.x}px,${transform.y}px)` : undefined }}
-      className={`flex items-center gap-2 rounded border bg-white px-2 py-1 text-sm ${isDragging ? 'z-10 shadow-lg' : ''}`}
+      className={`flex items-center gap-2 rounded border bg-card px-2 py-1 text-sm ${isDragging ? 'z-10 shadow-lg' : ''}`}
     >
-      <span {...listeners} {...attributes} aria-label={`Arrastar ${l.name}`} className="cursor-grab select-none px-1 text-slate-400">⠿</span>
+      <span {...listeners} {...attributes} aria-label={`Arrastar ${l.name}`} className="cursor-grab select-none px-1 text-mut">⠿</span>
       <span className={`h-2 w-2 rounded-full ${DOT[l.status] ?? DOT.INATIVO}`} />
       <Link href={`/liderancas/${l.id}`} className="hover:underline">{l.name}</Link>
-      <span className="text-xs text-slate-500">{l.supporterCount}/{l.goal}</span>
+      <span className="text-xs text-mut">{l.supporterCount}/{l.goal}</span>
     </div>
   );
 }
@@ -62,10 +62,10 @@ export function OrgChart({ coordinators, leaders, onMoved }: { coordinators: Coo
 
   return (
     <DndContext onDragEnd={onDragEnd}>
-      {error && <p role="alert" className="mb-2 text-sm text-red-600">{error}</p>}
+      {error && <p role="alert" className="mb-2 text-sm text-danger">{error}</p>}
       <div className="space-y-4">
         {coordinators.map((c) => (
-          <Drop key={c.id} id={`coord:${c.id}`} className="rounded-lg border bg-white p-3">
+          <Drop key={c.id} id={`coord:${c.id}`} className="rounded-lg border bg-card p-3">
             <h3 className="mb-2 font-semibold text-brand-dark">{c.name}</h3>
             <ul className="space-y-1">
               {leaders.filter((l) => !l.parentId && l.coordinatorId === c.id).map((l) => <Branch key={l.id} parent={l} all={leaders} />)}

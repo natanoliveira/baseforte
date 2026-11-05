@@ -32,20 +32,20 @@ export default function ApoiadoresPage() {
     <div className="space-y-3">
       <div className="flex items-center justify-between">
         <h1 className="text-xl font-semibold">Apoiadores</h1>
-        <Link href="/apoiadores/novo" className="rounded bg-brand px-3 py-2 text-sm text-white">Novo apoiador</Link>
+        <Link href="/apoiadores/novo" className="rounded bg-brand px-3 py-2 text-sm text-brand-ink">Novo apoiador</Link>
       </div>
       <input aria-label="Buscar" placeholder="Buscar por nome" value={q} onChange={(e) => { setQ(e.target.value); setPage(1); }} className="w-64 rounded border px-3 py-1.5 text-sm" />
-      {error && <p role="alert" className="text-sm text-red-600">{error}</p>}
-      <ul className="divide-y rounded border bg-white">
+      {error && <p role="alert" className="text-sm text-danger">{error}</p>}
+      <ul className="divide-y rounded border bg-card">
         {res?.data.map((s) => (
           <li key={s.id} className="flex items-center justify-between px-4 py-2 text-sm">
             <span>{s.name}</span>
             {s.hasActiveConsent
               ? <button className="text-brand underline" onClick={() => whatsapp(s.id)}>WhatsApp</button>
-              : <span className="text-xs text-slate-400">sem consentimento</span>}
+              : <span className="text-xs text-mut">sem consentimento</span>}
           </li>
         ))}
-        {res && !res.data.length && <li className="px-4 py-3 text-slate-500">Nenhum apoiador.</li>}
+        {res && !res.data.length && <li className="px-4 py-3 text-mut">Nenhum apoiador.</li>}
       </ul>
       <div className="flex items-center gap-3 text-sm">
         <button disabled={page <= 1} onClick={() => setPage(page - 1)} className="disabled:opacity-40">← Anterior</button>

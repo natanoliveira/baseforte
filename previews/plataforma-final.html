@@ -1,0 +1,329 @@
+<!DOCTYPE html>
+<html lang="pt-BR" data-theme="light">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>BaseForte — Preview final (híbrido + kanban)</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Young+Serif&family=Instrument+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root{--paper:#F3EEE2;--card:#FBF8F0;--ink:#12241F;--mut:#5b6b65;--line:#D6CDB8;--brand:#0F4C45;--brand-ink:#F3EEE2;--accent:#D99A1E;--ok:#2F7D5B;--cold:#C98A1B;--off:#7C8782;--danger:#B2452F;--soft:#E9E2CE;--r:12px;--shadow:0 1px 0 rgba(18,36,31,.06),0 10px 28px -14px rgba(18,36,31,.3);--display:'Young Serif',Georgia,serif;--body:'Instrument Sans',system-ui,sans-serif;--mono:'IBM Plex Mono',ui-monospace,monospace;--sbw:260px}
+[data-theme=dark]{--paper:#0C1815;--card:#162A25;--ink:#EFE9DA;--mut:#9fb0a9;--line:#294039;--brand:#58B59F;--brand-ink:#07211C;--accent:#E8AE3A;--ok:#5CBF92;--cold:#E0A63A;--off:#8E9994;--danger:#E0715A;--soft:#1d332d;--shadow:0 10px 28px -14px rgba(0,0,0,.6)}
+*{box-sizing:border-box;margin:0}
+body{background:var(--paper);color:var(--ink);font:15px/1.5 var(--body);min-height:100vh}
+button{font:inherit;color:inherit;background:none;border:0;cursor:pointer}
+svg.i{width:20px;height:20px;stroke:currentColor;fill:none;stroke-width:1.7;stroke-linecap:round;stroke-linejoin:round;flex:none}
+.app{display:grid;grid-template-columns:var(--sbw) 1fr;min-height:100vh;transition:grid-template-columns .28s cubic-bezier(.2,.8,.2,1)}
+.app.collapsed{--sbw:76px}
+
+/* sidebar */
+.sb{position:sticky;top:0;height:100vh;background:var(--brand);color:var(--brand-ink);display:flex;flex-direction:column;padding:16px 12px;overflow:hidden;z-index:30}
+[data-theme=dark] .sb{background:#0a2320;color:#EFE9DA;border-right:1px solid var(--line)}
+.logo{display:flex;align-items:center;gap:12px;padding:6px 10px 18px;font:400 22px var(--display);white-space:nowrap}
+.logo b{width:36px;height:36px;border-radius:10px;background:var(--accent);color:#2A1C00;display:grid;place-items:center;font:400 20px var(--display);flex:none}
+.grp{font:500 11px var(--mono);letter-spacing:.12em;text-transform:uppercase;opacity:.55;padding:14px 12px 6px;white-space:nowrap}
+.nav a{position:relative;display:flex;align-items:center;gap:14px;padding:10px 12px;border-radius:10px;color:inherit;text-decoration:none;opacity:.8;white-space:nowrap;transition:background .15s,opacity .15s}
+.nav a:hover{background:rgba(255,255,255,.1);opacity:1}
+.nav a.on{background:rgba(255,255,255,.16);opacity:1;font-weight:600}
+.nav a.on:after{content:"";position:absolute;right:-12px;top:50%;width:4px;height:22px;transform:translateY(-50%);background:var(--accent);border-radius:4px 0 0 4px}
+.nav a .cnt{margin-left:auto;font:500 11px var(--mono);background:var(--accent);color:#2A1C00;border-radius:99px;padding:1px 8px}
+.nav a .tip{position:absolute;left:62px;background:var(--ink);color:var(--paper);padding:4px 10px;border-radius:8px;font-size:13px;opacity:0;pointer-events:none;transform:translateX(-4px);transition:.15s;z-index:50}
+.collapsed .nav a:hover .tip{opacity:1;transform:none}
+.collapsed .lbl,.collapsed .grp,.collapsed .cnt,.collapsed .logo span,.collapsed .me .who{display:none}
+.collapsed .nav a{justify-content:center}.collapsed .logo{justify-content:center;padding-inline:0}
+.me{margin-top:auto;display:flex;align-items:center;gap:10px;padding:10px;border-radius:12px;background:rgba(255,255,255,.08)}
+.av{width:34px;height:34px;border-radius:50%;background:var(--accent);color:#2A1C00;display:grid;place-items:center;font-weight:600;flex:none}
+.me .who{font-size:13px;line-height:1.3;white-space:nowrap}.me .who small{opacity:.65;display:block}
+.collapsed .me{justify-content:center;padding:8px 0}
+
+/* main */
+.main{min-width:0;display:flex;flex-direction:column}
+.top{position:sticky;top:0;z-index:20;display:flex;align-items:center;gap:12px;padding:12px 28px;background:color-mix(in srgb,var(--paper) 88%,transparent);backdrop-filter:blur(10px);border-bottom:1px solid var(--line)}
+.ib{width:38px;height:38px;border-radius:10px;display:grid;place-items:center;border:1px solid var(--line);background:var(--card)}
+.ib:hover{border-color:var(--brand)}
+.search{flex:1;max-width:420px;display:flex;align-items:center;gap:8px;border:1px solid var(--line);background:var(--card);border-radius:10px;padding:0 12px;height:38px;color:var(--mut)}
+.search input{flex:1;border:0;background:none;outline:0;color:var(--ink);font:inherit;min-width:0}
+.search kbd{font:500 11px var(--mono);border:1px solid var(--line);border-radius:5px;padding:0 5px}
+.sp{flex:1}
+.legal{background:var(--soft);border-bottom:1px solid var(--line);font-size:12.5px;text-align:center;padding:5px 12px;color:var(--mut)}
+.page{padding:28px;max-width:1320px;width:100%;margin:0 auto}
+.view{display:none}.view.on{display:block;animation:in .4s ease both}
+@keyframes in{from{opacity:0;transform:translateY(8px)}}
+h1{font:400 34px/1.1 var(--display);letter-spacing:-.01em}
+h2{font:400 20px var(--display)}
+.sub{color:var(--mut);margin:6px 0 22px}
+.head{display:flex;justify-content:space-between;align-items:flex-end;gap:16px;flex-wrap:wrap}
+.btn{display:inline-flex;align-items:center;gap:8px;background:var(--brand);color:var(--brand-ink);padding:9px 16px;border-radius:10px;font-weight:600;font-size:14px}
+.btn.ghost{background:var(--card);color:var(--ink);border:1px solid var(--line)}
+.card{background:var(--card);border:1px solid var(--line);border-radius:var(--r);box-shadow:var(--shadow);padding:20px}
+.grid{display:grid;gap:18px}
+.kpis{grid-template-columns:repeat(auto-fit,minmax(210px,1fr));margin-bottom:18px}
+.kpi small{font:500 11px var(--mono);letter-spacing:.1em;text-transform:uppercase;color:var(--mut)}
+.kpi b{display:block;font:400 40px/1.1 var(--display);margin:6px 0 4px}
+.kpi span{font-size:13px;color:var(--mut)}.up{color:var(--ok)!important}.dn{color:var(--danger)!important}
+.bar{height:6px;border-radius:9px;background:var(--soft);overflow:hidden;margin-top:10px}.bar i{display:block;height:100%;background:var(--ok);border-radius:9px}
+.two{grid-template-columns:minmax(0,1.7fr) minmax(0,1fr)}
+@media(max-width:1100px){.two{grid-template-columns:1fr}}
+.mapbox{position:relative;border-radius:var(--r);overflow:hidden;border:1px solid var(--line);background:#dfe9e3}
+[data-theme=dark] .mapbox{background:#10231f}
+.mapbox svg{display:block;width:100%;height:auto}
+.chips{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:12px}
+.chip{border:1px solid var(--line);background:var(--card);border-radius:99px;padding:4px 12px;font-size:13px}
+.chip.on{background:var(--brand);color:var(--brand-ink);border-color:var(--brand)}
+.legend{position:absolute;left:12px;bottom:12px;background:var(--card);border:1px solid var(--line);border-radius:10px;padding:8px 12px;font-size:12px}
+.legend i{display:inline-block;width:70px;height:8px;border-radius:5px;background:linear-gradient(90deg,#B2452F,#D99A1E,#2F7D5B);vertical-align:middle;margin:0 6px}
+.rank{list-style:none;padding:0;display:grid;gap:10px;margin-top:14px}
+.rank li{display:grid;grid-template-columns:28px 1fr auto;gap:10px;align-items:center;font-size:14px}
+.rank .n{font:500 13px var(--mono);color:var(--mut)}
+.rank .bar{grid-column:2/4;margin:-4px 0 0}
+a.badge{text-decoration:none;color:var(--ink)}
+.badge{font:500 11px var(--mono);padding:2px 9px;border-radius:99px;background:var(--soft)}
+.badge.ok{background:color-mix(in srgb,var(--ok) 18%,transparent);color:var(--ok)}
+.badge.cold{background:color-mix(in srgb,var(--cold) 20%,transparent);color:var(--cold)}
+.badge.off{background:color-mix(in srgb,var(--off) 20%,transparent);color:var(--off)}
+.badge.bad{background:color-mix(in srgb,var(--danger) 18%,transparent);color:var(--danger)}
+.alert{display:flex;gap:12px;align-items:flex-start;background:color-mix(in srgb,var(--danger) 10%,var(--card));border:1px solid color-mix(in srgb,var(--danger) 35%,var(--line));border-radius:var(--r);padding:14px 16px;margin-bottom:18px;font-size:14px}
+table{width:100%;border-collapse:collapse;font-size:14px}
+th{font:500 11px var(--mono);letter-spacing:.08em;text-transform:uppercase;color:var(--mut);text-align:left;padding:10px 12px;border-bottom:1px solid var(--line)}
+td{padding:12px;border-bottom:1px solid var(--line)}tr:last-child td{border:0}
+.tree{list-style:none;padding:0;margin:0;font-size:14px}
+.tree ul{list-style:none;margin:6px 0 0 18px;padding-left:16px;border-left:1px dashed var(--line);display:grid;gap:6px}
+.node{display:inline-flex;align-items:center;gap:8px;background:var(--card);border:1px solid var(--line);border-radius:10px;padding:6px 12px;cursor:grab}
+.node.root{background:var(--brand);color:var(--brand-ink);border-color:var(--brand)}
+.dot{width:8px;height:8px;border-radius:50%;background:var(--ok)}.dot.c{background:var(--cold)}.dot.o{background:var(--off)}
+.mapfull{display:grid;grid-template-columns:1fr 300px;gap:18px}
+@media(max-width:1000px){.mapfull{grid-template-columns:1fr}}
+.field{display:grid;gap:4px;font-size:13px;color:var(--mut);margin-bottom:12px}
+.field div{border:1px solid var(--line);border-radius:10px;padding:9px 12px;background:var(--paper);color:var(--ink);font-size:14px}
+
+.bar2{display:flex;flex-wrap:wrap;gap:8px;align-items:center;margin-bottom:12px}
+.sel{border:1px solid var(--line);background:var(--card);border-radius:10px;padding:6px 12px;font-size:13.5px;color:var(--ink)}
+.kb{display:grid;grid-template-columns:repeat(3,minmax(260px,1fr));gap:16px;align-items:start;overflow-x:auto;padding-bottom:8px}
+.col{background:var(--soft);border-radius:14px;padding:12px;min-height:340px;transition:outline .15s}
+.col.over{outline:2px dashed var(--brand);outline-offset:-4px}
+.col h3{display:flex;align-items:center;gap:8px;font:500 12px var(--mono);letter-spacing:.1em;text-transform:uppercase;color:var(--mut);margin:2px 4px 12px}
+.col h3 em{font-style:normal;background:var(--card);border:1px solid var(--line);border-radius:99px;padding:0 8px;color:var(--ink)}
+.tk{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:12px 14px;margin-bottom:10px;cursor:grab;box-shadow:var(--shadow);transition:transform .15s}
+.tk:hover{transform:translateY(-2px)}.tk.drag{opacity:.4}
+.tk b{display:block;font-weight:600;font-size:14.5px;margin-bottom:6px}
+.tk .meta{display:flex;flex-wrap:wrap;gap:6px;align-items:center;font-size:12px;color:var(--mut)}
+.tk .ph{height:54px;border-radius:8px;margin-bottom:8px;background:repeating-linear-gradient(45deg,var(--soft),var(--soft) 8px,var(--paper) 8px,var(--paper) 16px);display:grid;place-items:center;font:500 11px var(--mono);color:var(--mut)}
+.tk .ret{margin-top:8px;font-size:12.5px;background:color-mix(in srgb,var(--ok) 12%,transparent);border-radius:8px;padding:6px 8px}
+.modal{position:fixed;inset:0;background:#0009;display:none;place-items:center;z-index:60;padding:16px}.modal.on{display:grid}
+.modal .box{background:var(--card);border-radius:16px;padding:24px;max-width:440px;width:100%;box-shadow:var(--shadow)}
+.modal textarea{width:100%;min-height:90px;border:1px solid var(--line);border-radius:10px;padding:10px;background:var(--paper);color:var(--ink);font:inherit;margin:10px 0}
+.handle{color:var(--mut);cursor:grab;margin-right:2px}
+.mapfull .mapbox{min-height:420px}
+.panelfloat{display:block}
+.scrim{display:none}
+
+/* mobile: sidebar vira gaveta */
+@media(max-width:860px){
+ .app,.app.collapsed{grid-template-columns:1fr}
+ .sb{position:fixed;left:0;top:0;width:280px;transform:translateX(-100%);transition:transform .25s}
+ .app.open .sb{transform:none}
+ .app.open .scrim{display:block;position:fixed;inset:0;background:#0008;z-index:25}
+ .app.collapsed .lbl,.app.collapsed .grp,.app.collapsed .cnt,.app.collapsed .logo span,.app.collapsed .me .who{display:initial}
+ .page{padding:18px}.top{padding:10px 16px}.search kbd{display:none}
+ #collapse{display:none}
+}
+@media(min-width:861px){#burger{display:none}}
+</style>
+</head>
+<body>
+<svg width="0" height="0" style="position:absolute"><defs>
+<symbol id="i-home" viewBox="0 0 24 24"><path d="M3 11l9-8 9 8M5 10v10h5v-6h4v6h5V10"/></symbol>
+<symbol id="i-map" viewBox="0 0 24 24"><path d="M9 4L3 6v14l6-2 6 2 6-2V4l-6 2-6-2zM9 4v14M15 6v14"/></symbol>
+<symbol id="i-tree" viewBox="0 0 24 24"><rect x="9" y="3" width="6" height="5" rx="1"/><rect x="3" y="16" width="6" height="5" rx="1"/><rect x="15" y="16" width="6" height="5" rx="1"/><path d="M12 8v4M6 16v-4h12v4"/></symbol>
+<symbol id="i-users" viewBox="0 0 24 24"><circle cx="9" cy="8" r="3.5"/><path d="M2.5 20c0-3.5 3-6 6.5-6s6.5 2.5 6.5 6M16 4.5a3.5 3.5 0 010 7M18 14c2.2.6 3.5 2.6 3.5 5"/></symbol>
+<symbol id="i-shield" viewBox="0 0 24 24"><path d="M12 3l8 3v6c0 5-3.5 8-8 9-4.5-1-8-4-8-9V6l8-3zM9 12l2 2 4-4"/></symbol>
+<symbol id="i-cal" viewBox="0 0 24 24"><rect x="3" y="5" width="18" height="16" rx="2"/><path d="M3 10h18M8 3v4M16 3v4"/></symbol>
+<symbol id="i-chat" viewBox="0 0 24 24"><path d="M4 5h16v11H9l-5 4V5z"/></symbol>
+<symbol id="i-coin" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M14.5 9c-.5-1-1.5-1.5-2.5-1.5-1.5 0-2.5.8-2.5 2s1 1.7 2.5 2 2.5.8 2.5 2-1 2-2.5 2c-1 0-2-.5-2.5-1.5M12 6v1.5M12 16.5V18"/></symbol>
+<symbol id="i-panel" viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="16" rx="2"/><path d="M9 4v16"/></symbol>
+<symbol id="i-menu" viewBox="0 0 24 24"><path d="M4 7h16M4 12h16M4 17h16"/></symbol>
+<symbol id="i-search" viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><path d="M20 20l-4-4"/></symbol>
+<symbol id="i-moon" viewBox="0 0 24 24"><path d="M20 14.5A8 8 0 019.5 4 8 8 0 1020 14.5z"/></symbol>
+<symbol id="i-bell" viewBox="0 0 24 24"><path d="M6 17V11a6 6 0 0112 0v6l2 2H4l2-2zM10 21h4"/></symbol>
+<symbol id="i-warn" viewBox="0 0 24 24"><path d="M12 3l10 18H2L12 3zM12 10v5M12 18v.5"/></symbol>
+<symbol id="i-out" viewBox="0 0 24 24"><path d="M9 4H4v16h5M16 8l4 4-4 4M20 12H9"/></symbol>
+</defs></svg>
+
+<div class="app" id="app">
+  <div class="scrim" onclick="app.classList.remove('open')"></div>
+  <aside class="sb" aria-label="Navegação principal">
+    <div class="logo"><b>B</b><span>BaseForte</span></div>
+    <nav class="nav">
+      <div class="grp">Visão geral</div>
+      <a href="#painel" class="on"><svg class="i"><use href="#i-home"/></svg><span class="lbl">Painel</span><span class="tip">Painel</span></a>
+      <a href="#mapa"><svg class="i"><use href="#i-map"/></svg><span class="lbl">Mapa</span><span class="tip">Mapa</span></a>
+      <div class="grp">Base</div>
+      <a href="#liderancas"><svg class="i"><use href="#i-tree"/></svg><span class="lbl">Lideranças</span><span class="tip">Lideranças</span></a>
+      <a href="#apoiadores"><svg class="i"><use href="#i-users"/></svg><span class="lbl">Apoiadores</span><span class="tip">Apoiadores</span></a>
+      <div class="grp">Campo</div>
+      <a href="#demandas"><svg class="i"><use href="#i-chat"/></svg><span class="lbl">Demandas</span><span class="cnt">5</span><span class="tip">Demandas</span></a>
+      <div class="grp">Conformidade</div>
+      <a href="#privacidade"><svg class="i"><use href="#i-shield"/></svg><span class="lbl">Privacidade</span><span class="cnt">1</span><span class="tip">Privacidade</span></a>
+      <div class="grp">Em breve</div>
+      <a href="#painel" style="opacity:.45"><svg class="i"><use href="#i-cal"/></svg><span class="lbl">Agenda</span><span class="tip">Agenda · fase 2</span></a>
+      
+      <a href="#painel" style="opacity:.45"><svg class="i"><use href="#i-coin"/></svg><span class="lbl">Financeiro</span><span class="tip">Financeiro · fase 3</span></a>
+    </nav>
+    <div class="me"><div class="av">CE</div><div class="who">Candidato(a) Exemplo<small>Candidato</small></div></div>
+  </aside>
+
+  <div class="main">
+    <header class="top">
+      <button class="ib" id="burger" aria-label="Abrir menu" onclick="app.classList.add('open')"><svg class="i"><use href="#i-menu"/></svg></button>
+      <button class="ib" id="collapse" aria-label="Recolher menu" title="Recolher/expandir menu"><svg class="i"><use href="#i-panel"/></svg></button>
+      <label class="search"><svg class="i"><use href="#i-search"/></svg><input placeholder="Buscar liderança, bairro ou apoiador"><kbd>/</kbd></label>
+      <span class="sp"></span>
+      <button class="ib" aria-label="Alertas"><svg class="i"><use href="#i-bell"/></svg></button>
+      <button class="ib" id="theme" aria-label="Alternar tema"><svg class="i"><use href="#i-moon"/></svg></button>
+      <button class="ib" aria-label="Sair" title="Sair"><svg class="i"><use href="#i-out"/></svg></button>
+    </header>
+    <div class="legal" role="note">O BaseForte não substitui orientação jurídica eleitoral.</div>
+
+    <main class="page">
+
+      <!-- PAINEL -->
+      <section class="view on" id="v-painel">
+        <div class="head"><div><h1>Bom dia, Candidato(a)</h1><p class="sub">Campanha Exemplo · Vereador(a) · Teresina-PI</p></div>
+          <div style="display:flex;gap:10px"><button class="btn ghost">Exportar PNG</button><button class="btn">Novo apoiador</button></div></div>
+        <div class="alert"><svg class="i" style="color:var(--danger)"><use href="#i-warn"/></svg><div><b>3 bairros sem nenhuma liderança:</b> Ilhotas, Pedra Mole e Água Mineral. <a href="#mapa" style="color:var(--brand);font-weight:600">Ver no mapa</a></div></div>
+        <div class="grid kpis">
+          <div class="card kpi"><small>Apoiadores</small><b>1.482</b><span class="up">▲ 86 nos últimos 7 dias</span></div>
+          <div class="card kpi"><small>Lideranças ativas</small><b>31<em style="font:400 20px var(--display);color:var(--mut)"> / 40</em></b><span>6 frias · 3 inativas</span></div>
+          <div class="card kpi"><small>Meta atingida</small><b>92%</b><div class="bar"><i style="width:92%"></i></div></div>
+          <div class="card kpi"><small>Consentimentos</small><b>100%</b><span class="up">todos com termo aceito</span></div>
+        </div>
+        <div class="grid two">
+          <div class="card"><div class="head" style="align-items:center;margin-bottom:12px"><h2>Mapa da base</h2><a href="#mapa" class="badge">abrir mapa →</a></div><div class="mapbox" id="mini"></div></div>
+          <div class="card"><h2>Ranking de lideranças</h2>
+            <ol class="rank">
+              <li><span class="n">01</span><span>Rafael Q. Nunes</span><span class="badge ok">126%</span><div class="bar"><i style="width:100%"></i></div></li>
+              <li><span class="n">02</span><span>Nilton B. Gomes</span><span class="badge ok">125%</span><div class="bar"><i style="width:98%"></i></div></li>
+              <li><span class="n">03</span><span>Ana O. Holanda</span><span class="badge ok">78%</span><div class="bar"><i style="width:78%;background:var(--cold)"></i></div></li>
+              <li><span class="n">04</span><span>Marta Lima</span><span class="badge cold">52%</span><div class="bar"><i style="width:52%;background:var(--cold)"></i></div></li>
+              <li><span class="n">05</span><span>Davi Sousa</span><span class="badge bad">21%</span><div class="bar"><i style="width:21%;background:var(--danger)"></i></div></li>
+            </ol>
+          </div>
+        </div>
+      </section>
+
+      <!-- MAPA -->
+      <section class="view" id="v-mapa">
+        <div class="head"><div><h1>Mapa</h1><p class="sub">Clique em um bairro para abrir o painel.</p></div><button class="btn ghost">Exportar PNG</button></div>
+        <div class="bar2"><select class="sel"><option>Todos os coordenadores</option></select><select class="sel"><option>Todos os bairros</option></select><select class="sel"><option>Qualquer status</option></select><input class="sel" placeholder="Meta mín." style="width:104px"><input class="sel" placeholder="Meta máx." style="width:104px"><a href="#" style="color:var(--brand);font-size:13.5px;text-decoration:underline">Limpar</a></div>
+        <div class="chips"><button class="chip on" data-t>Lideranças</button><button class="chip on" data-t>Calor</button><button class="chip on" data-t>% da meta</button><button class="chip on" data-t>Vazios</button><button class="chip" data-t>Locais de votação</button></div>
+        <div class="mapfull">
+          <div class="mapbox" id="big"><div class="legend">0% <i></i> 100% da meta</div></div>
+          <aside class="card"><h2>Centro</h2><p class="sub" style="margin:4px 0 14px">Região Norte</p>
+            <div class="kpi"><small>Meta</small><b style="font-size:32px">126%</b><span>63 / 50 apoiadores</span></div>
+            <h2 style="font-size:16px;margin:16px 0 8px">Lideranças</h2>
+            <p style="font-size:14px"><span class="dot" style="display:inline-block"></span> Rafael Q. Nunes · 63/50</p>
+            <h2 style="font-size:16px;margin:16px 0 8px">Pedidos</h2><p class="sub" style="margin:0">Disponível na fase 2.</p>
+            <button class="btn" style="margin-top:16px;width:100%;justify-content:center">Baixar relatório PDF</button></aside>
+        </div>
+      </section>
+
+      <!-- LIDERANÇAS -->
+      <section class="view" id="v-liderancas">
+        <div class="head"><div><h1>Pirâmide de lideranças</h1><p class="sub">Arraste uma liderança para um coordenador ou outra liderança.</p></div><button class="btn">Nova liderança</button></div>
+        <div class="grid two"><div class="card"><ul class="tree">
+          <li><span class="node root">Coord. Norte</span><ul>
+            <li><span class="node"><span class="handle">⠿</span><span class="dot"></span>Rafael Q. Nunes <small style="color:var(--mut)">63/50</small></span><ul><li><span class="node"><span class="handle">⠿</span><span class="dot c"></span>Marta Lima <small style="color:var(--mut)">26/50</small></span></li></ul></li>
+            <li><span class="node"><span class="handle">⠿</span><span class="dot"></span>Ana O. Holanda <small style="color:var(--mut)">32/41</small></span></li></ul></li>
+          <li style="margin-top:14px"><span class="node root">Coord. Sul</span><ul>
+            <li><span class="node"><span class="handle">⠿</span><span class="dot"></span>Nilton B. Gomes <small style="color:var(--mut)">66/53</small></span></li>
+            <li><span class="node"><span class="handle">⠿</span><span class="dot o"></span>Davi Sousa <small style="color:var(--mut)">10/48</small></span></li></ul></li>
+        </ul></div>
+        <div class="card"><h2>Status</h2><p class="sub" style="margin:4px 0 12px">31 ativas · 6 frias · 3 inativas</p>
+          <div class="bar" style="height:12px;display:flex"><i style="width:78%"></i><i style="width:15%;background:var(--cold)"></i><i style="width:7%;background:var(--off)"></i></div></div></div>
+      </section>
+
+      <!-- APOIADORES -->
+      <section class="view" id="v-apoiadores">
+        <div class="head"><div><h1>Apoiadores</h1><p class="sub">Só entra em contato quem tem consentimento ativo.</p></div><button class="btn">Novo apoiador</button></div>
+        <div class="card" style="padding:8px 12px"><table>
+          <tr><th>Nome</th><th>Bairro</th><th>Liderança</th><th>Consentimento</th><th></th></tr>
+          <tr><td>Cláudia M.</td><td>Centro</td><td>Rafael Q. Nunes</td><td><span class="badge ok">ativo</span></td><td><button class="badge">WhatsApp</button></td></tr>
+          <tr><td>Luís P.</td><td>Jóquei</td><td>Ana O. Holanda</td><td><span class="badge ok">ativo</span></td><td><button class="badge">WhatsApp</button></td></tr>
+          <tr><td>Cadastro removido</td><td>—</td><td>—</td><td><span class="badge off">removido</span></td><td></td></tr>
+        </table></div>
+      </section>
+
+
+      <!-- DEMANDAS (kanban) -->
+      <section class="view" id="v-demandas">
+        <div class="head"><div><h1>Demandas da comunidade</h1><p class="sub">Arraste o cartão entre as colunas. Ao resolver, o retorno ao cidadão é obrigatório.</p></div><button class="btn">Nova demanda</button></div>
+        <div class="bar2"><select class="sel"><option>Todos os bairros</option></select><select class="sel"><option>Todas as lideranças</option></select><span class="badge">5 demandas</span><span class="badge ok" id="done-n">1 resolvida</span></div>
+        <div class="kb" id="kb">
+          <div class="col" data-s="aberta"><h3>Abertas <em>2</em></h3>
+            <div class="tk" draggable="true"><div class="ph">foto</div><b>Poste queimado na Rua das Palmeiras</b><div class="meta"><span class="badge bad">alta</span>Centro · há 6 dias</div></div>
+            <div class="tk" draggable="true"><b>Buraco em frente à escola</b><div class="meta"><span class="badge cold">média</span>Jóquei · há 2 dias</div></div></div>
+          <div class="col" data-s="encaminhada"><h3>Encaminhadas <em>2</em></h3>
+            <div class="tk" draggable="true"><div class="ph">foto</div><b>Coleta de lixo irregular</b><div class="meta"><span class="badge cold">média</span>Santa Isabel · há 9 dias</div></div>
+            <div class="tk" draggable="true"><b>Falta de iluminação na praça</b><div class="meta"><span class="badge">baixa</span>Ilhotas · há 12 dias</div></div></div>
+          <div class="col" data-s="resolvida"><h3>Resolvidas <em>1</em></h3>
+            <div class="tk" draggable="true"><b>Bueiro entupido na Av. Norte</b><div class="meta"><span class="badge ok">resolvida</span>Centro</div><div class="ret">Retorno: equipe da prefeitura desobstruiu em 15/10; moradora avisada por telefone.</div></div></div>
+        </div>
+      </section>
+
+      <!-- PRIVACIDADE -->
+      <section class="view" id="v-privacidade">
+        <div class="head"><div><h1>Privacidade e LGPD</h1><p class="sub">Encarregado, registro de tratamento, auditoria.</p></div><button class="btn ghost">Auditoria</button></div>
+        <div class="grid two">
+          <div class="card"><h2>Encarregado de dados</h2><div style="margin-top:14px"><div class="field">Nome<div>Encarregado(a) Exemplo</div></div><div class="field">E-mail<div>dpo@exemplo.test</div></div><button class="btn">Salvar</button></div></div>
+          <div class="card"><h2>ROPA</h2><p class="sub" style="margin:4px 0 14px">1.482 apoiadores · 100% com consentimento</p><div style="display:flex;gap:10px"><button class="btn ghost">CSV</button><button class="btn ghost">PDF</button></div>
+            <p class="sub" style="margin:18px 0 6px;color:var(--danger)">Zona de risco</p><button class="btn" style="background:var(--danger);color:#fff">Encerrar campanha</button></div>
+        </div>
+      </section>
+    </main>
+  </div>
+</div>
+
+<div class="modal" id="modal"><div class="box"><h2>Resolver demanda</h2><p class="sub" style="margin:6px 0 0" id="m-t"></p>
+<label for="m-r" style="font-size:13px;color:var(--mut)">Retorno dado ao cidadão (obrigatório)</label><textarea id="m-r" placeholder="O que foi feito e como o cidadão foi avisado?"></textarea>
+<p id="m-e" style="color:var(--danger);font-size:13px;display:none">Descreva o retorno para concluir.</p>
+<div style="display:flex;gap:10px;justify-content:flex-end;margin-top:8px"><button class="btn ghost" id="m-c">Cancelar</button><button class="btn" id="m-ok">Marcar como resolvida</button></div></div></div>
+<script>
+const $=s=>document.querySelector(s), app=$('#app');
+// mapa SVG
+const polys=[['M20 30L190 14 230 120 70 150Z','#2F7D5B'],['M190 14L370 40 350 150 230 120Z','#8fae48'],['M370 40L560 22 590 140 350 150Z','#D99A1E'],['M70 150L230 120 350 150 330 280 90 270Z','#3f9468'],['M350 150L590 140 570 290 330 280Z','#B2452F'],['M590 140L720 160 700 280 570 290Z','#c9a23a']];
+const pins=[[120,80,10,'#fff'],[290,70,16],[470,80,9],[200,210,18],[450,215,20],[640,210,8]];
+function map(w,h){return `<svg viewBox="0 0 740 310" role="img" aria-label="Mapa ilustrativo" style="min-height:${h}px"><g stroke="var(--card)" stroke-width="2" fill-opacity=".8">${polys.map(p=>`<path d="${p[0]}" fill="${p[1]}"/>`).join('')}</g>
+<path d="M330 280L570 290" stroke="#fff" stroke-dasharray="5 5" stroke-width="2" opacity=".0"/>
+<circle cx="450" cy="215" r="70" fill="#B2452F" opacity=".25"/>
+<g stroke="var(--card)" stroke-width="3">${pins.map(p=>`<circle cx="${p[0]}" cy="${p[1]}" r="${p[2]}" fill="var(--ok)"/>`).join('')}<circle cx="520" cy="250" r="9" fill="var(--off)"/></g>
+<text x="440" y="270" font-family="Instrument Sans" font-size="13" font-weight="600" fill="#fff">sem liderança</text></svg>`}
+$('#mini').innerHTML=map(740,260);$('#big').insertAdjacentHTML('afterbegin',map(740,420));
+// roteamento por hash
+function route(){const id=(location.hash||'#painel').slice(1);const v=$('#v-'+id)||$('#v-painel');
+ document.querySelectorAll('.view').forEach(x=>x.classList.toggle('on',x===v));
+ document.querySelectorAll('.nav a').forEach(a=>a.classList.toggle('on',a.getAttribute('href')==='#'+v.id.slice(2)&&a.style.opacity!=='0.45'));
+ app.classList.remove('open');scrollTo(0,0)}
+addEventListener('hashchange',route);route();
+// recolher menu (lembra a escolha)
+const KEY='bf-sb';try{if(localStorage.getItem(KEY)==='1')app.classList.add('collapsed')}catch(e){}
+$('#collapse').onclick=()=>{app.classList.toggle('collapsed');try{localStorage.setItem(KEY,app.classList.contains('collapsed')?'1':'0')}catch(e){}};
+$('#theme').onclick=()=>{const d=document.documentElement;d.dataset.theme=d.dataset.theme==='dark'?'light':'dark'};
+
+// kanban com drag-and-drop e retorno obrigatório ao resolver
+let dragged=null,origin=null;
+const cols=[...document.querySelectorAll('.col')];
+function count(){cols.forEach(c=>c.querySelector('h3 em').textContent=c.querySelectorAll('.tk').length);
+ $('#done-n').textContent=cols[2].querySelectorAll('.tk').length+' resolvida(s)'}
+document.querySelectorAll('.tk').forEach(t=>{t.ondragstart=()=>{dragged=t;origin=t.parentNode;t.classList.add('drag')};t.ondragend=()=>t.classList.remove('drag')});
+cols.forEach(c=>{c.ondragover=e=>{e.preventDefault();c.classList.add('over')};c.ondragleave=()=>c.classList.remove('over');
+ c.ondrop=e=>{e.preventDefault();c.classList.remove('over');if(!dragged||c===origin)return;
+  if(c.dataset.s==='resolvida'){$('#m-t').textContent=dragged.querySelector('b').textContent;$('#m-r').value='';$('#m-e').style.display='none';$('#modal').classList.add('on');return}
+  dragged.querySelector('.ret')?.remove();c.appendChild(dragged);count()}});
+$('#m-c').onclick=()=>$('#modal').classList.remove('on');
+$('#m-ok').onclick=()=>{const v=$('#m-r').value.trim();if(!v){$('#m-e').style.display='block';return}
+ const r=document.createElement('div');r.className='ret';r.textContent='Retorno: '+v;dragged.appendChild(r);cols[2].appendChild(dragged);$('#modal').classList.remove('on');count()};
+document.querySelectorAll('[data-t]').forEach(b=>b.onclick=()=>b.classList.toggle('on'));
+addEventListener('keydown',e=>{if(e.key==='/'&&document.activeElement.tagName!=='INPUT'){e.preventDefault();$('.search input').focus()}});
+</script>
+</body>
+</html>
